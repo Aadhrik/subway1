@@ -1,0 +1,238 @@
+/* LED Dot Matrix Subway Board */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg-dark: #0a0a0a;
+  --led-amber: #ff6600;
+  --led-amber-bright: #ffa500;
+  --led-amber-dim: #cc5200;
+  --mta-orange: #ff6319;
+  --glow-color: rgba(255, 102, 0, 0.8);
+  --glow-spread: 0 0 10px var(--glow-color),
+    0 0 20px var(--glow-color),
+    0 0 30px rgba(255, 102, 0, 0.4),
+    0 0 40px rgba(255, 102, 0, 0.2);
+}
+
+html,
+body {
+  height: 100%;
+  background-color: var(--bg-dark);
+  font-family: 'VT323', monospace;
+  color: var(--led-amber);
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.board {
+  width: 100%;
+  max-width: 600px;
+  background: linear-gradient(145deg, #0d0d0d, #050505);
+  border: 3px solid #1a1a1a;
+  border-radius: 8px;
+  padding: 40px;
+  box-shadow:
+    inset 0 0 50px rgba(0, 0, 0, 0.5),
+    0 0 30px rgba(0, 0, 0, 0.8);
+}
+
+/* Station Header */
+.station-header {
+  text-align: center;
+  margin-bottom: 40px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #1a1a1a;
+}
+
+.station-name {
+  font-size: 3.5rem;
+  font-weight: normal;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--led-amber-bright);
+  text-shadow: var(--glow-spread);
+  animation: flicker 4s infinite alternate;
+}
+
+.direction {
+  font-size: 1.4rem;
+  color: var(--led-amber-dim);
+  margin-top: 8px;
+  letter-spacing: 2px;
+  text-shadow: 0 0 8px rgba(255, 102, 0, 0.5);
+}
+
+/* Line Rows */
+.departures {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.line-row {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 16px 0;
+}
+
+/* Line Badges */
+.line-badge {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: bold;
+  color: white;
+  flex-shrink: 0;
+  box-shadow:
+    0 0 15px rgba(255, 99, 25, 0.6),
+    0 0 30px rgba(255, 99, 25, 0.3),
+    inset 0 -3px 8px rgba(0, 0, 0, 0.3);
+}
+
+.badge-b,
+.badge-d {
+  background: linear-gradient(135deg, #ff7a33 0%, var(--mta-orange) 50%, #e55a10 100%);
+}
+
+/* Arrivals Display */
+.arrivals {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  align-items: baseline;
+}
+
+.arrival-time {
+  font-size: 2.8rem;
+  color: var(--led-amber-bright);
+  text-shadow: var(--glow-spread);
+  letter-spacing: 2px;
+}
+
+.arrival-time .unit {
+  font-size: 1.6rem;
+  color: var(--led-amber);
+  margin-left: 4px;
+}
+
+.arrival-time.arriving {
+  color: #00ff88;
+  text-shadow:
+    0 0 10px rgba(0, 255, 136, 0.8),
+    0 0 20px rgba(0, 255, 136, 0.6),
+    0 0 30px rgba(0, 255, 136, 0.4);
+  animation: pulse 1s infinite;
+}
+
+.loading {
+  font-size: 1.6rem;
+  color: var(--led-amber-dim);
+  animation: blink 1s infinite;
+}
+
+.no-service {
+  font-size: 1.6rem;
+  color: var(--led-amber-dim);
+  font-style: italic;
+  letter-spacing: 1px;
+}
+
+/* Update Footer */
+.update-info {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 2px solid #1a1a1a;
+  text-align: center;
+  font-size: 1rem;
+  color: var(--led-amber-dim);
+  letter-spacing: 1px;
+}
+
+/* Animations */
+@keyframes flicker {
+
+  0%,
+  95%,
+  100% {
+    opacity: 1;
+  }
+
+  96% {
+    opacity: 0.9;
+  }
+
+  97% {
+    opacity: 1;
+  }
+
+  98% {
+    opacity: 0.95;
+  }
+}
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.8;
+    transform: scale(1.02);
+  }
+}
+
+@keyframes blink {
+
+  0%,
+  49% {
+    opacity: 1;
+  }
+
+  50%,
+  100% {
+    opacity: 0.3;
+  }
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .board {
+    padding: 24px;
+  }
+
+  .station-name {
+    font-size: 2.5rem;
+  }
+
+  .line-badge {
+    width: 48px;
+    height: 48px;
+    font-size: 1.6rem;
+  }
+
+  .arrival-time {
+    font-size: 2.2rem;
+  }
+
+  .arrival-time .unit {
+    font-size: 1.2rem;
+  }
+}
