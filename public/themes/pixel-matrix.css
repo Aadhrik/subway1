@@ -1,0 +1,298 @@
+/* Theme 5: LED Pixel Matrix - True pixelated LED look with scanlines */
+
+:root {
+    --pixel-green: #33ff33;
+    --pixel-green-dim: #1a8c1a;
+    --pixel-green-glow: rgba(51, 255, 51, 0.8);
+    --screen-bg: #0a0f0a;
+    --mta-orange: #ff6319;
+}
+
+body {
+    background: #000000;
+    font-family: 'VT323', monospace;
+    color: var(--pixel-green);
+    image-rendering: pixelated;
+}
+
+/* CRT monitor frame */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background:
+        repeating-linear-gradient(0deg,
+            rgba(0, 0, 0, 0.15) 0px,
+            rgba(0, 0, 0, 0.15) 1px,
+            transparent 1px,
+            transparent 2px);
+    pointer-events: none;
+    z-index: 100;
+}
+
+/* Vignette effect */
+body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(ellipse at center,
+            transparent 0%,
+            transparent 60%,
+            rgba(0, 0, 0, 0.4) 100%);
+    pointer-events: none;
+    z-index: 99;
+}
+
+.board {
+    background: var(--screen-bg);
+    border: 12px solid #1a1a1a;
+    border-radius: 8px;
+    padding: 40px;
+    box-shadow:
+        inset 0 0 100px rgba(51, 255, 51, 0.05),
+        0 0 50px rgba(0, 0, 0, 0.9),
+        inset 0 0 2px 1px rgba(51, 255, 51, 0.1);
+    position: relative;
+}
+
+/* Pixel dot pattern overlay */
+.board::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image:
+        radial-gradient(circle at center, rgba(51, 255, 51, 0.03) 1px, transparent 1px);
+    background-size: 4px 4px;
+    pointer-events: none;
+    border-radius: 4px;
+}
+
+/* Station Header */
+.station-header {
+    text-align: center;
+    margin-bottom: 36px;
+    padding-bottom: 20px;
+    border-bottom: 2px dashed var(--pixel-green-dim);
+}
+
+.station-name {
+    font-size: 4rem;
+    font-weight: normal;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: var(--pixel-green);
+    text-shadow:
+        0 0 10px var(--pixel-green-glow),
+        0 0 20px var(--pixel-green-glow),
+        0 0 40px rgba(51, 255, 51, 0.4);
+    animation: screenFlicker 0.1s infinite;
+}
+
+.direction {
+    font-size: 1.5rem;
+    color: var(--pixel-green-dim);
+    margin-top: 12px;
+    letter-spacing: 4px;
+    text-shadow: 0 0 8px rgba(51, 255, 51, 0.3);
+}
+
+/* Line Rows */
+.departures {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.line-row {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    padding: 16px 0;
+    border-bottom: 1px dashed rgba(51, 255, 51, 0.2);
+}
+
+.line-row:last-child {
+    border-bottom: none;
+}
+
+/* Line Badges - Pixelated squares */
+.line-badge {
+    width: 56px;
+    height: 56px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.2rem;
+    font-weight: bold;
+    color: white;
+    flex-shrink: 0;
+    font-family: 'VT323', monospace;
+    image-rendering: pixelated;
+}
+
+.badge-b,
+.badge-d {
+    background: var(--mta-orange);
+    box-shadow:
+        0 0 15px rgba(255, 99, 25, 0.6),
+        inset 0 0 10px rgba(255, 255, 255, 0.1);
+}
+
+/* Arrivals Display */
+.arrivals {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    align-items: baseline;
+}
+
+.arrival-time {
+    font-size: 3.2rem;
+    color: var(--pixel-green);
+    text-shadow:
+        0 0 10px var(--pixel-green-glow),
+        0 0 20px var(--pixel-green-glow),
+        0 0 30px rgba(51, 255, 51, 0.3);
+    letter-spacing: 3px;
+    animation: textGlow 2s ease-in-out infinite alternate;
+}
+
+.arrival-time .unit {
+    font-size: 1.8rem;
+    color: var(--pixel-green-dim);
+    margin-left: 4px;
+}
+
+.arrival-time.arriving {
+    color: #ffff33;
+    text-shadow:
+        0 0 10px rgba(255, 255, 51, 0.8),
+        0 0 20px rgba(255, 255, 51, 0.6),
+        0 0 30px rgba(255, 255, 51, 0.4);
+    animation: urgentBlink 0.5s infinite;
+}
+
+.arrival-time.arriving .unit {
+    color: #cccc22;
+}
+
+.arrival-clock {
+    color: var(--pixel-green-dim);
+    font-size: 1.4rem;
+    margin-top: 4px;
+    text-shadow: none;
+}
+
+.loading {
+    font-size: 1.6rem;
+    color: var(--pixel-green-dim);
+    animation: cursorBlink 1s step-end infinite;
+}
+
+.loading::after {
+    content: '_';
+    animation: cursorBlink 0.5s step-end infinite;
+}
+
+.no-service {
+    font-size: 1.6rem;
+    color: var(--pixel-green-dim);
+    opacity: 0.7;
+}
+
+/* Update Footer */
+.update-info {
+    margin-top: 28px;
+    padding-top: 16px;
+    border-top: 2px dashed var(--pixel-green-dim);
+    text-align: center;
+    font-size: 1.1rem;
+    color: var(--pixel-green-dim);
+    letter-spacing: 2px;
+}
+
+/* Animations */
+@keyframes screenFlicker {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.98;
+    }
+}
+
+@keyframes textGlow {
+    0% {
+        opacity: 0.9;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes urgentBlink {
+
+    0%,
+    49% {
+        opacity: 1;
+    }
+
+    50%,
+    100% {
+        opacity: 0.6;
+    }
+}
+
+@keyframes cursorBlink {
+
+    0%,
+    49% {
+        opacity: 1;
+    }
+
+    50%,
+    100% {
+        opacity: 0;
+    }
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .board {
+        padding: 24px;
+        border-width: 8px;
+    }
+
+    .station-name {
+        font-size: 2.8rem;
+        letter-spacing: 3px;
+    }
+
+    .line-badge {
+        width: 48px;
+        height: 48px;
+        font-size: 1.8rem;
+    }
+
+    .arrival-time {
+        font-size: 2.4rem;
+    }
+
+    .arrival-time .unit {
+        font-size: 1.4rem;
+    }
+}

@@ -1,0 +1,315 @@
+/* Theme 6: Solari Board - Authentic split-flap with 3D depth and realistic panels */
+
+:root {
+    --panel-dark: #1a1916;
+    --panel-mid: #252320;
+    --panel-light: #2f2d28;
+    --flap-text: #fffef0;
+    --frame-metal: #3d3a35;
+    --divider-line: #0f0e0c;
+    --mta-orange: #ff6319;
+    --ambient-light: rgba(255, 254, 240, 0.03);
+}
+
+body {
+    background: linear-gradient(180deg, #12110f 0%, #1a1916 50%, #0d0c0b 100%);
+    font-family: 'Roboto Mono', 'Courier New', monospace;
+    color: var(--flap-text);
+}
+
+.board {
+    background: linear-gradient(180deg, #1f1e1a 0%, #1a1916 100%);
+    border: none;
+    border-radius: 2px;
+    padding: 0;
+    box-shadow:
+        0 30px 80px rgba(0, 0, 0, 0.8),
+        0 0 0 4px #2a2825,
+        0 0 0 8px #1a1916,
+        inset 0 1px 0 var(--ambient-light);
+    overflow: hidden;
+}
+
+/* Metal frame top */
+.board::before {
+    content: 'DEPARTURES';
+    display: block;
+    background: linear-gradient(180deg, #3d3a35 0%, #2a2825 50%, #1f1d1a 100%);
+    padding: 16px 40px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 8px;
+    color: #888;
+    text-align: center;
+    border-bottom: 3px solid var(--divider-line);
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Station Header */
+.station-header {
+    text-align: left;
+    padding: 28px 40px;
+    background: linear-gradient(180deg, var(--panel-mid) 0%, var(--panel-dark) 100%);
+    border-bottom: 2px solid var(--divider-line);
+}
+
+.station-name {
+    font-size: 2.8rem;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--flap-text);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.direction {
+    font-size: 1rem;
+    color: #777;
+    margin-top: 6px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 500;
+}
+
+/* Line Rows */
+.departures {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.line-row {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    gap: 0;
+    padding: 0;
+    background: linear-gradient(180deg, var(--panel-light) 0%, var(--panel-dark) 100%);
+    border-bottom: 2px solid var(--divider-line);
+    align-items: stretch;
+}
+
+.line-row:last-child {
+    border-bottom: none;
+}
+
+/* Line Badges */
+.line-badge {
+    width: 90px;
+    height: auto;
+    min-height: 80px;
+    border-radius: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: white;
+    flex-shrink: 0;
+    font-family: 'Inter', sans-serif;
+    background: var(--panel-dark);
+    border-right: 2px solid var(--divider-line);
+}
+
+.badge-b,
+.badge-d {
+    background: linear-gradient(180deg,
+            var(--panel-dark) 0%,
+            var(--panel-dark) 40%,
+            var(--panel-dark) 60%,
+            var(--panel-dark) 100%);
+}
+
+.badge-b::before,
+.badge-d::before {
+    content: '';
+    position: absolute;
+}
+
+.line-badge span,
+.badge-b,
+.badge-d {
+    position: relative;
+}
+
+/* Circle inside badge */
+.badge-b::after,
+.badge-d::after {
+    content: '';
+    position: absolute;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--mta-orange);
+    z-index: 0;
+    box-shadow:
+        inset 0 2px 4px rgba(255, 255, 255, 0.2),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.3),
+        0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* Arrivals Display - Split Flap Cards */
+.arrivals {
+    display: flex;
+    gap: 16px;
+    padding: 14px 24px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.arrival-time {
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+    background: linear-gradient(180deg,
+            #2a2825 0%,
+            #2a2825 47%,
+            #151413 47%,
+            #151413 53%,
+            #232220 53%,
+            #232220 100%);
+    padding: 14px 22px;
+    border-radius: 3px;
+    font-size: 2.6rem;
+    font-weight: 700;
+    color: var(--flap-text);
+    letter-spacing: 2px;
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.3),
+        0 1px 0 rgba(255, 255, 255, 0.02);
+    border: 1px solid #1a1917;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Flap hinge shadow */
+.arrival-time::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 1px;
+    background: linear-gradient(90deg,
+            transparent 0%,
+            rgba(0, 0, 0, 0.4) 10%,
+            rgba(0, 0, 0, 0.6) 50%,
+            rgba(0, 0, 0, 0.4) 90%,
+            transparent 100%);
+    transform: translateY(-1px);
+}
+
+/* Side notches */
+.arrival-time::after {
+    content: '';
+    position: absolute;
+    left: -2px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 12px;
+    background: #0f0e0c;
+    border-radius: 0 2px 2px 0;
+    box-shadow:
+        calc(100% + 100px - 2px) 0 0 #0f0e0c;
+}
+
+.arrival-time .unit {
+    font-size: 1.3rem;
+    color: #888;
+    margin-left: 8px;
+    font-weight: 500;
+    text-shadow: none;
+}
+
+.arrival-time.arriving {
+    color: #4ade80;
+}
+
+.arrival-time.arriving .unit {
+    color: #3cb371;
+}
+
+.arrival-clock {
+    color: #666;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.8rem;
+    margin-top: 8px;
+    letter-spacing: 1px;
+}
+
+.loading {
+    font-size: 1.2rem;
+    color: #666;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.no-service {
+    font-size: 1.1rem;
+    color: #555;
+    font-style: italic;
+}
+
+/* Update Footer */
+.update-info {
+    padding: 16px 40px;
+    background: linear-gradient(180deg, var(--panel-dark) 0%, #151413 100%);
+    border-top: 2px solid var(--divider-line);
+    text-align: right;
+    font-size: 0.75rem;
+    color: #555;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .board::before {
+        padding: 12px 20px;
+        font-size: 0.7rem;
+        letter-spacing: 4px;
+    }
+
+    .station-header {
+        padding: 20px;
+    }
+
+    .station-name {
+        font-size: 2rem;
+    }
+
+    .line-row {
+        grid-template-columns: 70px 1fr;
+    }
+
+    .line-badge {
+        width: 70px;
+        min-height: 70px;
+        font-size: 1.8rem;
+    }
+
+    .badge-b::after,
+    .badge-d::after {
+        width: 44px;
+        height: 44px;
+    }
+
+    .arrivals {
+        padding: 12px 16px;
+        gap: 12px;
+    }
+
+    .arrival-time {
+        font-size: 2rem;
+        padding: 10px 16px;
+    }
+
+    .arrival-time .unit {
+        font-size: 1rem;
+    }
+
+    .update-info {
+        padding: 12px 20px;
+    }
+}

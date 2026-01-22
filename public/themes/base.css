@@ -1,0 +1,170 @@
+/* Base styles shared across all themes */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
+    overflow-x: hidden;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    min-height: 100vh;
+    transition: background 0.5s ease;
+}
+
+/* Theme Switcher */
+.theme-switcher {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 30px;
+    z-index: 1000;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.theme-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.7);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.theme-btn {
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.theme-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+}
+
+.theme-btn.active {
+    background: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+}
+
+.theme-icon {
+    font-size: 16px;
+    color: white;
+}
+
+/* Board Container */
+.board {
+    width: 100%;
+    max-width: 650px;
+    transition: all 0.5s ease;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .theme-switcher {
+        top: 10px;
+        right: 10px;
+        padding: 8px 12px;
+    }
+
+    .theme-label {
+        display: none;
+    }
+
+    .theme-btn {
+        width: 32px;
+        height: 32px;
+    }
+}
+
+/* Shared Arrival Styles */
+.arrival-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.arrival-clock {
+    font-size: 0.5em;
+    opacity: 0.7;
+    margin-top: 4px;
+    letter-spacing: 1px;
+}
+
+/* Line Info Layout */
+.line-info {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex: 1;
+}
+
+.train-track-container {
+    flex: 1;
+    height: 40px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+}
+
+.track-line {
+    width: 100%;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.1);
+    position: relative;
+}
+
+.station-marker {
+    position: absolute;
+    right: 0;
+    height: 12px;
+    width: 2px;
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.train-icon {
+    position: absolute;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: left 1s linear;
+}
+
+.train-body {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: white;
+}
+
+.train-tooltip {
+    position: absolute;
+    top: -20px;
+    font-size: 10px;
+    white-space: nowrap;
+}

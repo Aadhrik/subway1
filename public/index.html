@@ -8,27 +8,68 @@
   <meta name="description" content="Real-time B and D train departures from Grand St station">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link
+    href="https://fonts.googleapis.com/css2?family=VT323&family=Roboto+Mono:wght@400;700&family=Inter:wght@300;400;600;700&family=Playfair+Display:wght@400;700&family=Space+Grotesk:wght@400;500;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="themes/base.css">
+  <link rel="stylesheet" href="themes/led-matrix.css" id="theme-stylesheet">
 </head>
 
 <body>
+  <!-- Theme Switcher -->
+  <nav class="theme-switcher" style="display: none;">
+    <span class="theme-label">Theme:</span>
+    <button class="theme-btn active" data-theme="led-matrix" title="LED Matrix">
+      <span class="theme-icon">◉</span>
+    </button>
+    <button class="theme-btn" data-theme="pixel-matrix" title="Pixel Matrix">
+      <span class="theme-icon">▦</span>
+    </button>
+    <button class="theme-btn" data-theme="split-flap" title="Split-Flap">
+      <span class="theme-icon">▤</span>
+    </button>
+    <button class="theme-btn" data-theme="solari-board" title="Solari Board">
+      <span class="theme-icon">▥</span>
+    </button>
+    <button class="theme-btn" data-theme="glassmorphism" title="Glassmorphism">
+      <span class="theme-icon">◈</span>
+    </button>
+    <button class="theme-btn" data-theme="swiss" title="Swiss Design">
+      <span class="theme-icon">▢</span>
+    </button>
+  </nav>
+
   <div class="board">
     <header class="station-header">
       <h1 class="station-name">Grand St</h1>
-      <div class="direction">Uptown &amp; The Bronx</div>
+      <div class="direction">Uptown & The Bronx</div>
+      <div id="current-time" class="current-time"></div>
     </header>
 
     <main class="departures">
       <div class="line-row" id="line-b">
-        <div class="line-badge badge-b">B</div>
+        <div class="line-info">
+          <div class="line-badge badge-b">B</div>
+          <div class="train-track-container" id="track-b">
+            <!-- Train icons will be injected here -->
+            <div class="track-line"></div>
+            <div class="station-marker"></div>
+          </div>
+        </div>
         <div class="arrivals" id="arrivals-b">
           <span class="loading">Loading...</span>
         </div>
       </div>
 
       <div class="line-row" id="line-d">
-        <div class="line-badge badge-d">D</div>
+        <div class="line-info">
+          <div class="line-badge badge-d">D</div>
+          <div class="train-track-container" id="track-d">
+            <!-- Train icons will be injected here -->
+            <div class="track-line"></div>
+            <div class="station-marker"></div>
+          </div>
+        </div>
         <div class="arrivals" id="arrivals-d">
           <span class="loading">Loading...</span>
         </div>
@@ -41,6 +82,32 @@
   </div>
 
   <script src="app.js"></script>
+  <script>
+    // Theme Switcher Logic
+    const themeButtons = document.querySelectorAll('.theme-btn');
+    const themeStylesheet = document.getElementById('theme-stylesheet');
+
+    themeButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const theme = btn.dataset.theme;
+        themeStylesheet.href = `themes/${theme}.css`;
+
+        themeButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        localStorage.setItem('subway-theme', theme);
+      });
+    });
+
+    // Load saved theme
+    const savedTheme = localStorage.getItem('subway-theme');
+    if (savedTheme) {
+      themeStylesheet.href = `themes/${savedTheme}.css`;
+      themeButtons.forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.theme === savedTheme);
+      });
+    }
+  </script>
 </body>
 
 </html>

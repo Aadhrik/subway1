@@ -1,0 +1,289 @@
+/* Theme 4: Swiss Design - Clean, minimal, typographic */
+
+:root {
+    --white: #ffffff;
+    --black: #000000;
+    --gray-50: #fafafa;
+    --gray-100: #f5f5f5;
+    --gray-200: #e5e5e5;
+    --gray-400: #a3a3a3;
+    --gray-600: #525252;
+    --gray-900: #171717;
+    --mta-orange: #ff6319;
+    --red-accent: #dc2626;
+}
+
+body {
+    background: var(--white);
+    font-family: 'Space Grotesk', 'Inter', -apple-system, sans-serif;
+    color: var(--gray-900);
+}
+
+.board {
+    background: var(--white);
+    padding: 60px;
+    position: relative;
+}
+
+/* Grid lines decoration */
+.board::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 60px;
+    right: 60px;
+    height: 1px;
+    background: var(--gray-200);
+}
+
+/* Station Header */
+.station-header {
+    margin-bottom: 60px;
+    padding-bottom: 30px;
+    border-bottom: 4px solid var(--black);
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 20px;
+    align-items: end;
+}
+
+.station-name {
+    font-size: 5rem;
+    font-weight: 700;
+    letter-spacing: -3px;
+    line-height: 0.9;
+    color: var(--black);
+    text-transform: uppercase;
+}
+
+.direction {
+    font-size: 0.85rem;
+    color: var(--gray-600);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: 500;
+    align-self: end;
+    padding-bottom: 8px;
+}
+
+/* Line Rows */
+.departures {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.line-row {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 40px;
+    padding: 32px 0;
+    border-bottom: 1px solid var(--gray-200);
+    align-items: center;
+}
+
+.line-row:last-child {
+    border-bottom: none;
+}
+
+/* Line Badges */
+.line-badge {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: 700;
+    color: white;
+    flex-shrink: 0;
+    font-family: 'Inter', sans-serif;
+}
+
+.badge-b,
+.badge-d {
+    background: var(--mta-orange);
+}
+
+/* Arrivals Display */
+.arrivals {
+    display: flex;
+    gap: 48px;
+    align-items: baseline;
+}
+
+.arrival-time {
+    display: inline-flex;
+    align-items: baseline;
+    font-size: 4rem;
+    font-weight: 700;
+    color: var(--black);
+    letter-spacing: -2px;
+    line-height: 1;
+    position: relative;
+}
+
+.arrival-time::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: transparent;
+    transition: background 0.3s ease;
+}
+
+.arrival-time:hover::after {
+    background: var(--black);
+}
+
+.arrival-time .unit {
+    font-size: 1.2rem;
+    color: var(--gray-400);
+    margin-left: 4px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.arrival-time.arriving {
+    color: var(--red-accent);
+}
+
+.arrival-time.arriving .unit {
+    color: var(--red-accent);
+}
+
+.arrival-clock {
+    color: var(--gray-400);
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    margin-top: 8px;
+}
+
+.loading {
+    font-size: 1rem;
+    color: var(--gray-400);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 500;
+}
+
+.no-service {
+    font-size: 1rem;
+    color: var(--gray-400);
+    letter-spacing: 1px;
+}
+
+/* Update Footer */
+.update-info {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--gray-200);
+    text-align: left;
+    font-size: 0.75rem;
+    color: var(--gray-400);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 500;
+}
+
+/* Red accent corner */
+.board::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 40px;
+    height: 40px;
+    background: var(--red-accent);
+}
+
+/* Override theme switcher for light theme */
+.theme-switcher {
+    background: rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+.theme-label {
+    color: var(--gray-600);
+}
+
+.theme-btn {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.theme-btn:hover {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.theme-btn.active {
+    background: var(--black);
+}
+
+.theme-icon {
+    color: var(--gray-600);
+}
+
+.theme-btn.active .theme-icon {
+    color: white;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .board {
+        padding: 30px;
+    }
+
+    .board::before {
+        left: 30px;
+        right: 30px;
+    }
+
+    .station-header {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        margin-bottom: 40px;
+    }
+
+    .station-name {
+        font-size: 3rem;
+        letter-spacing: -1px;
+    }
+
+    .direction {
+        padding-bottom: 0;
+    }
+
+    .line-row {
+        grid-template-columns: 56px 1fr;
+        gap: 20px;
+        padding: 24px 0;
+    }
+
+    .line-badge {
+        width: 48px;
+        height: 48px;
+        font-size: 1.5rem;
+    }
+
+    .arrivals {
+        gap: 24px;
+    }
+
+    .arrival-time {
+        font-size: 2.5rem;
+    }
+
+    .arrival-time .unit {
+        font-size: 0.9rem;
+    }
+
+    .board::after {
+        width: 24px;
+        height: 24px;
+    }
+}

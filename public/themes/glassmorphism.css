@@ -1,0 +1,288 @@
+/* Theme 3: Glassmorphism - Modern frosted glass aesthetic */
+
+:root {
+    --glass-bg: rgba(255, 255, 255, 0.08);
+    --glass-border: rgba(255, 255, 255, 0.15);
+    --text-primary: #ffffff;
+    --text-secondary: rgba(255, 255, 255, 0.7);
+    --accent-purple: #a855f7;
+    --accent-pink: #ec4899;
+    --accent-blue: #3b82f6;
+    --mta-orange: #ff6319;
+}
+
+body {
+    background: linear-gradient(135deg, #1e1b4b 0%, #312e81 25%, #4c1d95 50%, #581c87 75%, #701a75 100%);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--text-primary);
+    min-height: 100vh;
+}
+
+/* Animated gradient orbs */
+body::before,
+body::after {
+    content: '';
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.5;
+    animation: float 20s ease-in-out infinite;
+    z-index: 0;
+}
+
+body::before {
+    width: 500px;
+    height: 500px;
+    background: var(--accent-purple);
+    top: -100px;
+    left: -100px;
+}
+
+body::after {
+    width: 400px;
+    height: 400px;
+    background: var(--accent-pink);
+    bottom: -100px;
+    right: -100px;
+    animation-delay: -10s;
+}
+
+.board {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    padding: 48px;
+    box-shadow:
+        0 25px 50px rgba(0, 0, 0, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    position: relative;
+    z-index: 1;
+}
+
+/* Station Header */
+.station-header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.station-name {
+    font-size: 3rem;
+    font-weight: 700;
+    letter-spacing: -1px;
+    background: linear-gradient(135deg, #fff 0%, rgba(255, 255, 255, 0.8) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.direction {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin-top: 8px;
+    font-weight: 400;
+}
+
+/* Line Rows */
+.departures {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.line-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px 24px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    transition: all 0.3s ease;
+}
+
+.line-row:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Line Badges */
+.line-badge {
+    width: 54px;
+    height: 54px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: white;
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.badge-b,
+.badge-d {
+    background: linear-gradient(135deg, #ff8c42 0%, var(--mta-orange) 100%);
+    box-shadow:
+        0 8px 24px rgba(255, 99, 25, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.badge-b::after,
+.badge-d::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    animation: shimmer 3s infinite;
+}
+
+/* Arrivals Display */
+.arrivals {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.arrival-time {
+    display: inline-flex;
+    align-items: baseline;
+    padding: 10px 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+}
+
+.arrival-time:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: scale(1.05);
+}
+
+.arrival-time .unit {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-left: 4px;
+    font-weight: 400;
+}
+
+.arrival-time.arriving {
+    background: linear-gradient(135deg, rgba(74, 222, 128, 0.2) 0%, rgba(34, 197, 94, 0.2) 100%);
+    border-color: rgba(74, 222, 128, 0.3);
+    color: #4ade80;
+    animation: glowPulse 2s infinite;
+}
+
+.arrival-clock {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.loading {
+    font-size: 1rem;
+    color: var(--text-secondary);
+}
+
+.no-service {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    opacity: 0.7;
+}
+
+/* Update Footer */
+.update-info {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid var(--glass-border);
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    font-weight: 400;
+}
+
+/* Animations */
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translate(0, 0) scale(1);
+    }
+
+    33% {
+        transform: translate(30px, -30px) scale(1.1);
+    }
+
+    66% {
+        transform: translate(-20px, 20px) scale(0.9);
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        left: -100%;
+    }
+
+    50%,
+    100% {
+        left: 100%;
+    }
+}
+
+@keyframes glowPulse {
+
+    0%,
+    100% {
+        box-shadow: 0 0 20px rgba(74, 222, 128, 0.3);
+    }
+
+    50% {
+        box-shadow: 0 0 30px rgba(74, 222, 128, 0.5);
+    }
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .board {
+        padding: 28px;
+        border-radius: 20px;
+    }
+
+    .station-name {
+        font-size: 2.2rem;
+    }
+
+    .line-row {
+        padding: 16px;
+        gap: 16px;
+    }
+
+    .line-badge {
+        width: 46px;
+        height: 46px;
+        border-radius: 12px;
+        font-size: 1.4rem;
+    }
+
+    .arrival-time {
+        font-size: 1.5rem;
+        padding: 8px 16px;
+    }
+
+    .arrival-time .unit {
+        font-size: 0.8rem;
+    }
+}

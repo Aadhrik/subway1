@@ -1,0 +1,269 @@
+/* Theme 2: Split-Flap Display - Vintage mechanical departure board */
+
+:root {
+    --flap-bg: #1a1a1a;
+    --flap-text: #f5f5dc;
+    --frame-color: #2a2a2a;
+    --accent-gold: #d4af37;
+    --mta-orange: #ff6319;
+}
+
+body {
+    background: linear-gradient(180deg, #0f0f0f 0%, #1a1a1a 50%, #0a0a0a 100%);
+    font-family: 'Roboto Mono', monospace;
+    color: var(--flap-text);
+}
+
+/* Add texture overlay */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background:
+        repeating-linear-gradient(0deg,
+            transparent,
+            transparent 2px,
+            rgba(0, 0, 0, 0.03) 2px,
+            rgba(0, 0, 0, 0.03) 4px);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.board {
+    background: linear-gradient(145deg, #252525, #1a1a1a);
+    border: 8px solid #333;
+    border-radius: 4px;
+    padding: 50px 40px;
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.8),
+        inset 0 2px 0 rgba(255, 255, 255, 0.05),
+        inset 0 -2px 0 rgba(0, 0, 0, 0.3);
+    position: relative;
+    z-index: 2;
+}
+
+/* Decorative screws */
+.board::before,
+.board::after {
+    content: '●';
+    position: absolute;
+    font-size: 12px;
+    color: #444;
+    text-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.board::before {
+    top: 15px;
+    left: 15px;
+}
+
+.board::after {
+    top: 15px;
+    right: 15px;
+}
+
+/* Station Header */
+.station-header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-bottom: 25px;
+    border-bottom: 3px solid var(--accent-gold);
+}
+
+.station-name {
+    font-size: 3rem;
+    font-weight: 700;
+    letter-spacing: 8px;
+    text-transform: uppercase;
+    color: var(--flap-text);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    position: relative;
+}
+
+.station-name::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 2px;
+    background: var(--accent-gold);
+}
+
+.direction {
+    font-size: 1.1rem;
+    color: #888;
+    margin-top: 20px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
+
+/* Line Rows */
+.departures {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.line-row {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 20px;
+    background: linear-gradient(180deg, #1f1f1f 0%, #181818 100%);
+    border-radius: 4px;
+    border: 1px solid #333;
+}
+
+/* Line Badges */
+.line-badge {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: white;
+    flex-shrink: 0;
+    font-family: 'Inter', sans-serif;
+}
+
+.badge-b,
+.badge-d {
+    background: var(--mta-orange);
+    box-shadow: 0 4px 12px rgba(255, 99, 25, 0.4);
+}
+
+/* Arrivals Display - Split Flap Style */
+.arrivals {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.arrival-time {
+    display: inline-flex;
+    align-items: baseline;
+    background: linear-gradient(180deg,
+            #2a2a2a 0%,
+            #2a2a2a 48%,
+            #1a1a1a 48%,
+            #1a1a1a 52%,
+            #222 52%,
+            #222 100%);
+    padding: 12px 18px;
+    border-radius: 4px;
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: var(--flap-text);
+    letter-spacing: 2px;
+    box-shadow:
+        0 4px 8px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    border: 1px solid #333;
+    animation: flipIn 0.3s ease-out;
+}
+
+.arrival-time .unit {
+    font-size: 1.2rem;
+    color: #888;
+    margin-left: 6px;
+    font-weight: 400;
+}
+
+.arrival-time.arriving {
+    color: #4ade80;
+    animation: flipIn 0.3s ease-out, gentlePulse 2s infinite;
+}
+
+.arrival-clock {
+    color: #666;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-top: 6px;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.loading {
+    font-size: 1.4rem;
+    color: #666;
+    letter-spacing: 2px;
+}
+
+.no-service {
+    font-size: 1.2rem;
+    color: #666;
+    font-style: italic;
+}
+
+/* Update Footer */
+.update-info {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #333;
+    text-align: center;
+    font-size: 0.85rem;
+    color: #555;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+/* Animations */
+@keyframes flipIn {
+    0% {
+        transform: rotateX(-90deg);
+        opacity: 0;
+    }
+
+    100% {
+        transform: rotateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes gentlePulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.7;
+    }
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .board {
+        padding: 30px 20px;
+    }
+
+    .station-name {
+        font-size: 2rem;
+        letter-spacing: 4px;
+    }
+
+    .line-badge {
+        width: 44px;
+        height: 44px;
+        font-size: 1.5rem;
+    }
+
+    .arrival-time {
+        font-size: 1.8rem;
+        padding: 10px 14px;
+    }
+
+    .arrival-time .unit {
+        font-size: 1rem;
+    }
+}

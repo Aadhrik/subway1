@@ -8,15 +8,71 @@ const arrivalsB = document.getElementById('arrivals-b');
 const arrivalsD = document.getElementById('arrivals-d');
 const lastUpdate = document.getElementById('last-update');
 
+// Format arrival time (e.g. 10:45 PM)
+function formatClockTime(timestamp) {
+    return new Date(timestamp * 1000).toLocaleTimeString('en-US', {
+        hour: 'numeric',
+        minute: '2-digit'
+    });
+}
+
 // Format minutes into display text
-function formatArrival(minutes) {
+function formatArrival(arrival) {
+    const { minutes, timestamp } = arrival;
+    const timeStr = formatClockTime(timestamp);
+
+    let countdownHtml;
     if (minutes <= 0) {
-        return '<span class="arrival-time arriving">NOW</span>';
+        countdownHtml = '<span class="arrival-time arriving">NOW</span>';
     } else if (minutes === 1) {
-        return `<span class="arrival-time arriving">1<span class="unit">min</span></span>`;
+        countdownHtml = `<span class="arrival-time arriving">1<span class="unit">min</span></span>`;
     } else {
-        return `<span class="arrival-time">${minutes}<span class="unit">min</span></span>`;
+        countdownHtml = `<span class="arrival-time">${minutes}<span class="unit">min</span></span>`;
     }
+
+    return `
+    <div class="arrival-item">
+      ${countdownHtml}
+      <span class="arrival-clock">${timeStr}</span>
+    </div>
+  `;
+}
+
+// Render train icons on track
+function renderTrack(elementId, arrivals, lineLetter) {
+    const container = document.getElementById(elementId);
+    // Keep the static track elements
+    container.innerHTML = `
+    <div class="track-line"></div>
+    <div class="station-marker"></div>
+  `;
+
+    if (!arrivals) return;
+
+    // Max minutes to show on track (e.g. 20 mins away is start of track)
+    const MAX_MINUTES = 20;
+
+    arrivals.forEach(arrival => {
+        const minutes = arrival.minutes;
+        if (minutes > MAX_MINUTES) return;
+
+        // Calculate percentage (0 min = 100% right, 20 min = 0% left)
+        // We want 0 min to be at the station marker (right side)
+        let percent = Math.max(0, Math.min(100, 100 - (minutes / MAX_MINUTES * 100)));
+
+        // If arriving now, pulse at the station
+        if (minutes <= 0) percent = 100;
+
+        const trainIcon = document.createElement('div');
+        trainIcon.className = `train-icon ${minutes <= 0 ? 'arriving' : ''}`;
+        trainIcon.style.left = `${percent}%`;
+        trainIcon.innerHTML = `
+      <div class="train-body">${lineLetter}</div>
+      <div class="train-tooltip">${minutes <= 0 ? 'Now' : minutes + 'm'}</div>
+    `;
+
+        container.appendChild(trainIcon);
+    });
 }
 
 // Render arrivals for a line
@@ -52,6 +108,9 @@ async function fetchArrivals() {
         renderArrivals(arrivalsB, data.arrivals.B);
         renderArrivals(arrivalsD, data.arrivals.D);
 
+        renderTrack('track-b', data.arrivals.B, 'B');
+        renderTrack('track-d', data.arrivals.D, 'D');
+
         lastUpdate.textContent = `Updated ${formatTime(new Date())}`;
 
     } catch (error) {
@@ -63,6 +122,17 @@ async function fetchArrivals() {
     }
 }
 
+// Update current time display
+function updateCurrentTime() {
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString('en-US', {
+        hour: 'numeric',
+        minute: '2-digit',
+        second: '2-digit'
+    });
+    document.getElementById('current-time').textContent = timeStr;
+}
+
 // Initialize
 function init() {
     // Initial fetch
@@ -70,6 +140,10 @@ function init() {
 
     // Poll every 30 seconds
     setInterval(fetchArrivals, POLL_INTERVAL);
+
+    // Update clock every second
+    updateCurrentTime();
+    setInterval(updateCurrentTime, 1000);
 }
 
 // Start when DOM is ready

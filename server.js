@@ -76,7 +76,7 @@ app.get('/api/arrivals', async (req, res) => {
         // Sort by time and take first 3 for each line
         for (const line of TARGET_LINES) {
             arrivals[line].sort((a, b) => a.timestamp - b.timestamp);
-            arrivals[line] = arrivals[line].slice(0, 3).map(a => a.minutes);
+            arrivals[line] = arrivals[line].slice(0, 3);
         }
 
         res.json({
