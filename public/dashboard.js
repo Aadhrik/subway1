@@ -50,6 +50,7 @@ class Dashboard {
         this.initGrid();
         this.startClock();
         this.setupKeyboardShortcuts();
+        this.setupFullscreenListeners();
     }
 
     /**
@@ -74,6 +75,9 @@ class Dashboard {
                         <span class="dashboard-date"></span>
                         <span class="dashboard-time"></span>
                     </div>
+                    <button class="fullscreen-toggle" onclick="dashboard.toggleFullscreen()" title="Toggle Fullscreen">
+                        <span class="fullscreen-icon">⛶</span>
+                    </button>
                     <button class="edit-toggle" onclick="dashboard.toggleEditMode()">
                         <span class="edit-icon">⚙</span>
                         <span class="edit-label">Edit</span>
@@ -119,6 +123,74 @@ class Dashboard {
         this.grid.on('change', () => {
             this.saveLayout();
         });
+    }
+
+    /**
+     * Toggle fullscreen mode
+     * Works on desktop, tablets, and mobile devices
+     */
+    toggleFullscreen() {
+        const btn = this.container.querySelector('.fullscreen-toggle');
+        const icon = btn.querySelector('.fullscreen-icon');
+        
+        // Check if already in fullscreen (with vendor prefixes)
+        const isFullscreen = document.fullscreenElement || 
+                            document.webkitFullscreenElement || 
+                            document.mozFullScreenElement || 
+                            document.msFullscreenElement;
+        
+        if (!isFullscreen) {
+            // Enter fullscreen (try standard first, then vendor prefixes)
+            const element = document.documentElement;
+            const requestFullscreen = element.requestFullscreen || 
+                                    element.webkitRequestFullscreen || 
+                                    element.mozRequestFullScreen || 
+                                    element.msRequestFullscreen;
+            
+            if (requestFullscreen) {
+                requestFullscreen.call(element).then(() => {
+                    icon.textContent = '⛶';
+                    btn.title = 'Exit Fullscreen';
+                }).catch(err => {
+                    console.warn('Fullscreen failed:', err);
+                });
+            }
+        } else {
+            // Exit fullscreen
+            const exitFullscreen = document.exitFullscreen || 
+                                 document.webkitExitFullscreen || 
+                                 document.mozCancelFullScreen || 
+                                 document.msExitFullscreen;
+            
+            if (exitFullscreen) {
+                exitFullscreen.call(document).then(() => {
+                    icon.textContent = '⛶';
+                    btn.title = 'Toggle Fullscreen';
+                });
+            }
+        }
+    }
+
+    /**
+     * Update fullscreen button state when fullscreen changes
+     */
+    updateFullscreenButton() {
+        const btn = this.container?.querySelector('.fullscreen-toggle');
+        if (!btn) return;
+        
+        const icon = btn.querySelector('.fullscreen-icon');
+        const isFullscreen = document.fullscreenElement || 
+                            document.webkitFullscreenElement || 
+                            document.mozFullScreenElement || 
+                            document.msFullscreenElement;
+        
+        if (isFullscreen) {
+            icon.textContent = '⛶';
+            btn.title = 'Exit Fullscreen';
+        } else {
+            icon.textContent = '⛶';
+            btn.title = 'Toggle Fullscreen';
+        }
     }
 
     /**
@@ -322,7 +394,7 @@ class Dashboard {
 
     setupKeyboardShortcuts() {
         document.addEventListener('keydown', (e) => {
-            // Escape to exit edit mode
+            // Escape to exit edit mode or fullscreen
             if (e.key === 'Escape' && this.isEditMode) {
                 this.toggleEditMode();
             }
@@ -330,6 +402,20 @@ class Dashboard {
             if (e.key === 'e' && !e.ctrlKey && !e.metaKey && document.activeElement.tagName !== 'INPUT') {
                 this.toggleEditMode();
             }
+            // F to toggle fullscreen
+            if (e.key === 'f' && !e.ctrlKey && !e.metaKey && document.activeElement.tagName !== 'INPUT') {
+                this.toggleFullscreen();
+            }
+        });
+    }
+
+    setupFullscreenListeners() {
+        // Listen for fullscreen changes (including when user exits via gesture on tablet)
+        const events = ['fullscreenchange', 'webkitfullscreenchange', 'mozfullscreenchange', 'MSFullscreenChange'];
+        events.forEach(event => {
+            document.addEventListener(event, () => {
+                this.updateFullscreenButton();
+            });
         });
     }
 

@@ -95,6 +95,39 @@ body {
     color: var(--dashboard-text);
 }
 
+/* Fullscreen Toggle Button */
+.fullscreen-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    min-width: 44px; /* iOS touch target minimum */
+    min-height: 44px; /* iOS touch target minimum */
+    padding: 0;
+    background: transparent;
+    border: 1px solid var(--dashboard-border);
+    border-radius: 8px;
+    color: var(--dashboard-text-dim);
+    font-size: 1.2rem;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation; /* Prevents double-tap zoom on mobile */
+    transition: all 0.2s ease;
+}
+
+.fullscreen-toggle:hover,
+.fullscreen-toggle:active {
+    background: var(--dashboard-border);
+    color: var(--dashboard-text);
+}
+
+.fullscreen-icon {
+    line-height: 1;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
 /* Edit Toggle Button */
 .edit-toggle {
     display: flex;
