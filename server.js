@@ -63,7 +63,8 @@ app.get('/api/arrivals', async (req, res) => {
                         stopTime.departure?.time;
 
                     if (arrivalTime && arrivalTime > now) {
-                        const minutesAway = Math.round((arrivalTime - now) / 60);
+                        // Use floor to be conservative - show minimum time you have
+                        const minutesAway = Math.floor((arrivalTime - now) / 60);
                         arrivals[line].push({
                             minutes: minutesAway,
                             timestamp: arrivalTime

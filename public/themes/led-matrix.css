@@ -72,9 +72,18 @@ body {
 
 .line-row {
     display: flex;
+    flex-direction: column;
+    padding: 20px;
+    background: rgba(255, 102, 0, 0.03);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 102, 0, 0.1);
+}
+
+/* Line Header (badge + times on same row) */
+.line-header {
+    display: flex;
     align-items: center;
-    gap: 24px;
-    padding: 16px 0;
+    gap: 20px;
 }
 
 /* Line Badges */
@@ -104,12 +113,10 @@ body {
 /* Arrivals Display */
 .arrivals {
     display: flex;
-    gap: 20px;
+    gap: 24px;
     flex-wrap: wrap;
     align-items: baseline;
-    flex-shrink: 0;
-    min-width: 180px;
-    justify-content: flex-end;
+    flex: 1;
 }
 
 .arrival-time {
@@ -146,43 +153,311 @@ body {
     animation: blink 1s infinite;
 }
 
-/* Track Styles */
+/* ========================================
+   Train Track Visualization - Full Width
+   ======================================== */
+
+.train-track-container {
+    width: 100%;
+    height: 56px;
+    margin-top: 16px;
+    padding: 0;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+/* Main track rail - trains move RIGHT to LEFT */
 .track-line {
-    background: repeating-linear-gradient(90deg,
-            var(--led-amber-dim) 0,
-            var(--led-amber-dim) 4px,
-            transparent 4px,
-            transparent 8px);
-    height: 2px;
-    opacity: 0.5;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg,
+        var(--led-amber-bright) 0%,
+        var(--led-amber-dim) 10%,
+        var(--led-amber-dim) 90%,
+        rgba(255, 102, 0, 0.2) 100%);
+    border-radius: 2px;
+    position: relative;
 }
 
-.station-marker {
-    background: var(--led-amber-bright);
-    box-shadow: 0 0 10px var(--led-amber);
+/* Track ties/sleepers pattern */
+.track-line::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: 0;
+    right: 0;
     height: 16px;
-    width: 4px;
+    background: repeating-linear-gradient(90deg,
+        rgba(255, 102, 0, 0.08) 0px,
+        rgba(255, 102, 0, 0.08) 3px,
+        transparent 3px,
+        transparent 24px);
+    pointer-events: none;
 }
 
-.train-body {
-    background: var(--led-amber-bright);
-    box-shadow: 0 0 8px var(--led-amber);
-    width: 10px;
-    height: 10px;
+/* Station platform indicator - on the LEFT */
+.station-marker {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 6px;
+    height: 36px;
+    background: linear-gradient(180deg,
+        var(--led-amber-bright) 0%,
+        var(--led-amber) 50%,
+        var(--led-amber-bright) 100%);
+    border-radius: 3px;
+    box-shadow: 
+        0 0 12px var(--led-amber),
+        0 0 24px rgba(255, 102, 0, 0.5);
 }
 
-.train-icon.arriving .train-body {
-    background: #00ff88;
-    box-shadow: 0 0 10px #00ff88;
-    animation: pulse 0.5s infinite;
-}
-
-.train-tooltip {
-    color: var(--led-amber);
+/* Station label */
+.station-marker::after {
+    content: 'HERE';
+    position: absolute;
+    bottom: -18px;
+    left: 50%;
+    transform: translateX(-50%);
     font-family: 'VT323', monospace;
+    font-size: 0.7rem;
+    color: var(--led-amber-dim);
+    opacity: 0.6;
+    white-space: nowrap;
+    letter-spacing: 1px;
+}
+
+/* Tick marks along the track - 1 minute apart */
+.track-ticks {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+}
+
+.track-tick {
+    position: absolute;
+    top: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Minor tick (every minute) */
+.track-tick.minor::before {
+    content: '';
+    width: 1px;
+    height: 8px;
+    background: var(--led-amber-dim);
+    opacity: 0.3;
+    margin-top: 6px;
+}
+
+/* Major tick (every 5 minutes) */
+.track-tick.major::before {
+    content: '';
+    width: 2px;
+    height: 12px;
+    background: var(--led-amber-dim);
+    opacity: 0.5;
+    margin-top: 4px;
+}
+
+.tick-label {
+    font-family: 'VT323', monospace;
+    font-size: 0.7rem;
+    color: var(--led-amber-dim);
+    opacity: 0.5;
+    margin-top: 2px;
+    text-shadow: 0 0 4px rgba(255, 102, 0, 0.2);
+}
+
+/* ========================================
+   Train Icons - Moving RIGHT → LEFT
+   ======================================== */
+
+.train-icon {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    transition: left 1s linear;
+    z-index: 10;
+}
+
+/* Train body - sleek subway car shape facing LEFT */
+.train-body {
+    width: 48px;
+    height: 18px;
+    background: linear-gradient(180deg,
+        var(--led-amber-bright) 0%,
+        var(--led-amber) 50%,
+        var(--led-amber-dim) 100%);
+    border-radius: 6px 3px 3px 6px;
+    position: relative;
+    box-shadow: 
+        0 0 14px var(--led-amber),
+        0 0 28px rgba(255, 102, 0, 0.4);
+}
+
+/* Train headlight - on the LEFT (front of train) */
+.train-body::before {
+    content: '';
+    position: absolute;
+    left: -4px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 6px;
+    height: 8px;
+    background: var(--led-amber-bright);
+    border-radius: 3px 0 0 3px;
+    box-shadow: 
+        -8px 0 16px var(--led-amber),
+        -16px 0 32px rgba(255, 102, 0, 0.5);
+}
+
+/* Train windows */
+.train-body::after {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 8px;
+    right: 6px;
+    height: 4px;
+    background: repeating-linear-gradient(90deg,
+        rgba(0, 0, 0, 0.5) 0px,
+        rgba(0, 0, 0, 0.5) 6px,
+        transparent 6px,
+        transparent 10px);
+    border-radius: 1px;
+}
+
+/* Tooltip showing minutes - above train */
+.train-tooltip {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-bottom: 8px;
+    font-family: 'VT323', monospace;
+    font-size: 1.1rem;
+    color: var(--led-amber);
+    text-shadow: 0 0 10px var(--led-amber-dim);
+    white-space: nowrap;
+    letter-spacing: 1px;
+}
+
+/* Arriving train - bright green */
+.train-icon.arriving .train-body {
+    background: linear-gradient(180deg,
+        #00ff88 0%,
+        #00dd77 50%,
+        #00bb66 100%);
+    box-shadow: 
+        0 0 20px #00ff88,
+        0 0 40px rgba(0, 255, 136, 0.5);
+    animation: train-pulse 0.6s ease-in-out infinite;
+}
+
+.train-icon.arriving .train-body::before {
+    background: #00ff88;
+    box-shadow: 
+        -8px 0 20px #00ff88,
+        -18px 0 40px rgba(0, 255, 136, 0.6);
+}
+
+.train-icon.arriving .train-tooltip {
+    color: #00ff88;
+    text-shadow: 
+        0 0 12px rgba(0, 255, 136, 0.9),
+        0 0 24px rgba(0, 255, 136, 0.5);
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+/* Close train (1-5 min) - brighter */
+.train-icon.close .train-body {
+    box-shadow: 
+        0 0 18px var(--led-amber),
+        0 0 36px rgba(255, 102, 0, 0.5);
+}
+
+.train-icon.close .train-tooltip {
     font-size: 1.2rem;
-    text-shadow: 0 0 5px var(--led-amber-dim);
-    top: -24px;
+}
+
+/* Mid-distance train (5-10 min) */
+.train-icon.mid-distance .train-body {
+    opacity: 0.85;
+}
+
+/* Distant train (10-20 min) - dimmer */
+.train-icon.distant .train-body {
+    opacity: 0.6;
+    box-shadow: 
+        0 0 8px var(--led-amber),
+        0 0 16px rgba(255, 102, 0, 0.2);
+}
+
+.train-icon.distant .train-tooltip {
+    opacity: 0.6;
+    font-size: 0.9rem;
+}
+
+/* Pulse animation for arriving trains */
+@keyframes train-pulse {
+    0%, 100% {
+        box-shadow: 
+            0 0 20px #00ff88,
+            0 0 40px rgba(0, 255, 136, 0.5);
+    }
+    50% {
+        box-shadow: 
+            0 0 30px #00ff88,
+            0 0 60px rgba(0, 255, 136, 0.7);
+    }
+}
+
+/* Track glow when train is arriving (gradient intensifies toward left/station) */
+.track-arriving .track-line {
+    background: linear-gradient(90deg,
+        #00ff88 0%,
+        var(--led-amber) 40%,
+        rgba(255, 102, 0, 0.2) 100%);
+    height: 5px;
+}
+
+.track-arriving .station-marker {
+    background: linear-gradient(180deg,
+        #00ff88 0%,
+        #00dd77 50%,
+        #00ff88 100%);
+    box-shadow: 
+        0 0 20px #00ff88,
+        0 0 40px rgba(0, 255, 136, 0.6);
+    animation: station-pulse 0.6s ease-in-out infinite;
+}
+
+.track-arriving .station-marker::after {
+    color: #00ff88;
+    opacity: 1;
+}
+
+@keyframes station-pulse {
+    0%, 100% {
+        box-shadow: 
+            0 0 20px #00ff88,
+            0 0 40px rgba(0, 255, 136, 0.6);
+    }
+    50% {
+        box-shadow: 
+            0 0 30px #00ff88,
+            0 0 60px rgba(0, 255, 136, 0.8);
+    }
 }
 
 .no-service {
@@ -255,24 +530,74 @@ body {
 /* Responsive */
 @media (max-width: 480px) {
     .board {
-        padding: 24px;
+        padding: 20px;
     }
 
     .station-name {
         font-size: 2.5rem;
     }
 
+    .line-row {
+        padding: 16px;
+    }
+
+    .line-header {
+        gap: 12px;
+    }
+
     .line-badge {
-        width: 48px;
-        height: 48px;
-        font-size: 1.6rem;
+        width: 44px;
+        height: 44px;
+        font-size: 1.5rem;
     }
 
     .arrival-time {
-        font-size: 2.2rem;
+        font-size: 2rem;
     }
 
     .arrival-time .unit {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
+    }
+
+    .train-track-container {
+        height: 48px;
+        margin-top: 12px;
+    }
+
+    .train-body {
+        width: 36px;
+        height: 16px;
+        font-size: 0.6rem;
+    }
+
+    .train-tooltip {
+        font-size: 0.9rem;
+        margin-bottom: 4px;
+    }
+
+    .track-marker {
+        font-size: 0.65rem;
+    }
+
+    .station-marker {
+        height: 28px;
+        width: 5px;
+    }
+
+    .station-marker::after {
+        font-size: 0.55rem;
+        bottom: -14px;
+    }
+
+    .track-tick.minor::before {
+        height: 6px;
+    }
+
+    .track-tick.major::before {
+        height: 10px;
+    }
+
+    .tick-label {
+        font-size: 0.6rem;
     }
 }
