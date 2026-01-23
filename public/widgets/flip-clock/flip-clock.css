@@ -1,0 +1,464 @@
+/**
+ * Flip Clock Widget Styles
+ * Elegant split-flap digital clock
+ * Dramatic flip-down animation
+ */
+
+.flip-clock-widget {
+    --fc-card-top: #fafaf8;
+    --fc-card-bottom: #e9e9e5;
+    --fc-text: #1a1a1a;
+    --fc-shadow: rgba(0, 0, 0, 0.4);
+    --fc-line: rgba(0, 0, 0, 0.15);
+    
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+    padding: 24px;
+    background: linear-gradient(160deg, #1a1a1a 0%, #0d0d0d 100%);
+    border-radius: 16px;
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    overflow: visible;
+}
+
+/* ========================================
+   Clock Container
+   ======================================== */
+
+.fc-clock {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+}
+
+.fc-group {
+    display: flex;
+    gap: 8px;
+}
+
+/* ========================================
+   Flip Card Container
+   ======================================== */
+
+.fc-flip {
+    position: relative;
+    width: 60px;
+    height: 88px;
+    perspective: 300px;
+    border-radius: 8px;
+    box-shadow: 0 8px 20px var(--fc-shadow);
+}
+
+/* ========================================
+   Static Card (Background - shows new number)
+   ======================================== */
+
+.fc-static {
+    position: absolute;
+    inset: 0;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Top half of static */
+.fc-static::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: var(--fc-card-top);
+    border-radius: 8px 8px 0 0;
+}
+
+/* Bottom half of static */
+.fc-static::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: var(--fc-card-bottom);
+    border-radius: 0 0 8px 8px;
+}
+
+.fc-static .fc-digit {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+}
+
+/* Center line */
+.fc-static .fc-digit::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 2px;
+    background: var(--fc-line);
+    transform: translateY(-50%);
+}
+
+/* ========================================
+   Flip Card (Animated)
+   ======================================== */
+
+.fc-flip-card {
+    position: absolute;
+    inset: 0;
+    transform-style: preserve-3d;
+}
+
+/* Top flap - shows OLD number, flips down */
+.fc-flip-front {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: var(--fc-card-top);
+    border-radius: 8px 8px 0 0;
+    transform-origin: bottom center;
+    backface-visibility: hidden;
+    overflow: hidden;
+    z-index: 10;
+    box-shadow: 
+        0 1px 0 rgba(255,255,255,0.9) inset,
+        0 -1px 3px rgba(0,0,0,0.1);
+}
+
+.fc-flip-front .fc-digit {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 200%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Back of top flap - shows NEW number (upside down initially) */
+.fc-flip-back {
+    position: absolute;
+    bottom: 50%;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: var(--fc-card-bottom);
+    border-radius: 0 0 8px 8px;
+    transform-origin: bottom center;
+    transform: rotateX(180deg);
+    backface-visibility: hidden;
+    overflow: hidden;
+    z-index: 10;
+}
+
+.fc-flip-back .fc-digit {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 200%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ========================================
+   Flip Animation
+   ======================================== */
+
+.fc-flip-card.flip .fc-flip-front {
+    animation: flipDown 0.5s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
+}
+
+.fc-flip-card.flip .fc-flip-back {
+    animation: flipUp 0.5s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
+}
+
+@keyframes flipDown {
+    0% {
+        transform: rotateX(0deg);
+        box-shadow: 
+            0 1px 0 rgba(255,255,255,0.9) inset,
+            0 0 0 rgba(0,0,0,0);
+    }
+    50% {
+        transform: rotateX(-90deg);
+        box-shadow: 
+            0 1px 0 rgba(255,255,255,0.5) inset,
+            0 6px 12px rgba(0,0,0,0.3);
+    }
+    100% {
+        transform: rotateX(-180deg);
+        box-shadow: 
+            0 1px 0 rgba(255,255,255,0.9) inset,
+            0 0 0 rgba(0,0,0,0);
+    }
+}
+
+@keyframes flipUp {
+    0% {
+        transform: rotateX(180deg);
+        box-shadow: 0 0 0 rgba(0,0,0,0);
+    }
+    50% {
+        transform: rotateX(90deg);
+        box-shadow: 0 -6px 12px rgba(0,0,0,0.3);
+    }
+    100% {
+        transform: rotateX(0deg);
+        box-shadow: 
+            0 -1px 0 rgba(255,255,255,0.5) inset,
+            0 2px 4px rgba(0,0,0,0.1);
+    }
+}
+
+/* Shadow that appears during flip */
+.fc-flip-card.flip::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(180deg, rgba(0,0,0,0.15) 0%, transparent 40%);
+    border-radius: 0 0 8px 8px;
+    animation: flipShadow 0.5s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
+    pointer-events: none;
+}
+
+@keyframes flipShadow {
+    0% { opacity: 0; }
+    30% { opacity: 1; }
+    70% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+/* ========================================
+   Digit Typography
+   ======================================== */
+
+.fc-digit {
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: var(--fc-text);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -2px;
+    line-height: 1;
+    text-shadow: 0 1px 1px rgba(255,255,255,0.5);
+}
+
+/* ========================================
+   Separator (Colon)
+   ======================================== */
+
+.fc-separator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    height: 88px;
+    padding: 0 2px;
+}
+
+.fc-colon {
+    font-size: 2rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1;
+    text-shadow: 0 2px 8px rgba(255, 255, 255, 0.2);
+}
+
+/* ========================================
+   AM/PM Indicator
+   ======================================== */
+
+.fc-ampm {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.5);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    align-self: flex-end;
+    margin-left: 8px;
+    padding-bottom: 6px;
+}
+
+/* ========================================
+   Date Display (Right of clock)
+   ======================================== */
+
+.fc-date {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+}
+
+.fc-weekday {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+    letter-spacing: 0.5px;
+}
+
+.fc-fulldate {
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* ========================================
+   Responsive & Size Variants
+   ======================================== */
+
+@media (max-width: 768px) {
+    .fc-flip {
+        width: 48px;
+        height: 70px;
+    }
+    
+    .fc-digit {
+        font-size: 2.8rem;
+    }
+    
+    .fc-colon {
+        font-size: 1.6rem;
+    }
+    
+    .fc-separator {
+        height: 70px;
+    }
+}
+
+/* Small widget */
+.widget-small .fc-flip {
+    width: 42px;
+    height: 60px;
+}
+
+.widget-small .fc-digit {
+    font-size: 2.4rem;
+}
+
+.widget-small .fc-colon {
+    font-size: 1.4rem;
+}
+
+.widget-small .fc-separator {
+    height: 60px;
+    gap: 12px;
+}
+
+.widget-small .fc-group {
+    gap: 5px;
+}
+
+.widget-small .fc-clock {
+    gap: 8px;
+}
+
+.widget-small .fc-ampm {
+    font-size: 0.85rem;
+}
+
+.widget-small .fc-date {
+    gap: 2px;
+}
+
+.widget-small .fc-weekday {
+    font-size: 0.85rem;
+}
+
+.widget-small .fc-fulldate {
+    font-size: 0.75rem;
+}
+
+/* Large widget */
+.widget-large .fc-flip,
+.widget-wide .fc-flip,
+.widget-full .fc-flip {
+    width: 80px;
+    height: 110px;
+}
+
+.widget-large .fc-digit,
+.widget-wide .fc-digit,
+.widget-full .fc-digit {
+    font-size: 4.5rem;
+}
+
+.widget-large .fc-colon,
+.widget-wide .fc-colon,
+.widget-full .fc-colon {
+    font-size: 2.5rem;
+}
+
+.widget-large .fc-separator,
+.widget-wide .fc-separator,
+.widget-full .fc-separator {
+    height: 110px;
+}
+
+/* ========================================
+   Seconds Cards (Slightly Smaller)
+   ======================================== */
+
+.fc-seconds .fc-flip {
+    width: 48px;
+    height: 70px;
+}
+
+.fc-seconds .fc-digit {
+    font-size: 2.8rem;
+}
+
+.widget-small .fc-seconds .fc-flip {
+    width: 34px;
+    height: 48px;
+}
+
+.widget-small .fc-seconds .fc-digit {
+    font-size: 1.9rem;
+}
+
+.widget-large .fc-seconds .fc-flip,
+.widget-wide .fc-seconds .fc-flip,
+.widget-full .fc-seconds .fc-flip {
+    width: 64px;
+    height: 88px;
+}
+
+.widget-large .fc-seconds .fc-digit,
+.widget-wide .fc-seconds .fc-digit,
+.widget-full .fc-seconds .fc-digit {
+    font-size: 3.5rem;
+}
+
+/* ========================================
+   Card Texture & Polish
+   ======================================== */
+
+.fc-flip::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 8px;
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.5),
+        inset 0 -1px 0 rgba(0,0,0,0.1);
+    pointer-events: none;
+    z-index: 20;
+}

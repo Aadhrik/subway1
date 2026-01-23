@@ -1,0 +1,484 @@
+/**
+ * Dashboard Styles
+ * Drag & drop grid-based widget system
+ */
+
+/* ========================================
+   CSS Variables
+   ======================================== */
+
+:root {
+    --dashboard-bg: #0a0a0a;
+    --dashboard-surface: #111111;
+    --dashboard-border: #222222;
+    --dashboard-text: #e0e0e0;
+    --dashboard-text-dim: #666666;
+    --dashboard-accent: #3b82f6;
+    --dashboard-success: #00ff88;
+    --dashboard-warning: #ffaa00;
+    --dashboard-error: #ff4444;
+    
+    --widget-radius: 16px;
+    --header-height: 60px;
+    
+    --font-sans: 'DM Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* ========================================
+   Base Reset
+   ======================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    background: var(--dashboard-bg);
+    color: var(--dashboard-text);
+    font-family: var(--font-sans);
+}
+
+/* ========================================
+   Dashboard Layout
+   ======================================== */
+
+.dashboard {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Header */
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    height: var(--header-height);
+    background: var(--dashboard-surface);
+    border-bottom: 1px solid var(--dashboard-border);
+    flex-shrink: 0;
+}
+
+.dashboard-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--dashboard-text);
+    letter-spacing: -0.5px;
+}
+
+.dashboard-controls {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.dashboard-clock {
+    font-size: 0.9rem;
+    color: var(--dashboard-text-dim);
+}
+
+.dashboard-date {
+    margin-right: 12px;
+}
+
+.dashboard-time {
+    font-variant-numeric: tabular-nums;
+    color: var(--dashboard-text);
+}
+
+/* Edit Toggle Button */
+.edit-toggle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: transparent;
+    border: 1px solid var(--dashboard-border);
+    border-radius: 8px;
+    color: var(--dashboard-text-dim);
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.edit-toggle:hover {
+    background: var(--dashboard-border);
+    color: var(--dashboard-text);
+}
+
+.edit-toggle.active {
+    background: var(--dashboard-accent);
+    border-color: var(--dashboard-accent);
+    color: white;
+}
+
+.edit-icon {
+    font-size: 1rem;
+}
+
+/* ========================================
+   Grid Stack Overrides
+   ======================================== */
+
+.grid-stack {
+    flex: 1;
+    overflow: auto;
+    padding: 16px;
+    background: var(--dashboard-bg);
+}
+
+.grid-stack-item {
+    border-radius: var(--widget-radius);
+    overflow: visible;
+}
+
+.grid-stack-item-content {
+    border-radius: var(--widget-radius);
+    overflow: hidden;
+    background: var(--dashboard-surface);
+    border: 1px solid var(--dashboard-border);
+    height: 100%;
+}
+
+/* Widget Wrapper */
+.widget-wrapper {
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.widget-content {
+    flex: 1;
+    overflow: hidden;
+    border-radius: var(--widget-radius);
+}
+
+/* Drag Handle - Hidden by default */
+.widget-drag-handle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(180deg, rgba(0,0,0,0.5) 0%, transparent 100%);
+    cursor: move;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    z-index: 10;
+    border-radius: var(--widget-radius) var(--widget-radius) 0 0;
+}
+
+.drag-dots {
+    color: rgba(255,255,255,0.6);
+    font-size: 1rem;
+    letter-spacing: 2px;
+}
+
+/* Delete Button - Hidden by default */
+.widget-delete {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 68, 68, 0.9);
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    opacity: 0;
+    transition: all 0.2s ease;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.widget-delete:hover {
+    background: #ff2222;
+    transform: scale(1.1);
+}
+
+/* ========================================
+   Edit Mode Styles
+   ======================================== */
+
+.dashboard.edit-mode .grid-stack {
+    background: 
+        linear-gradient(90deg, var(--dashboard-border) 1px, transparent 1px),
+        linear-gradient(var(--dashboard-border) 1px, transparent 1px);
+    background-size: calc(100% / 12) 70px;
+    background-position: -1px -1px;
+}
+
+.dashboard.edit-mode .widget-drag-handle {
+    opacity: 1;
+}
+
+.dashboard.edit-mode .widget-delete {
+    opacity: 1;
+}
+
+.dashboard.edit-mode .grid-stack-item-content {
+    border-color: var(--dashboard-accent);
+    box-shadow: 0 0 0 1px var(--dashboard-accent);
+}
+
+/* Resize Handles in Edit Mode */
+.dashboard.edit-mode .gs-resizable-handle {
+    opacity: 1;
+}
+
+.gs-resizable-handle {
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.ui-resizable-se {
+    background: var(--dashboard-accent);
+    width: 16px !important;
+    height: 16px !important;
+    right: 4px !important;
+    bottom: 4px !important;
+    border-radius: 4px;
+}
+
+.ui-resizable-e, .ui-resizable-w {
+    width: 8px !important;
+}
+
+.ui-resizable-s {
+    height: 8px !important;
+}
+
+/* Placeholder while dragging */
+.grid-stack-placeholder > .placeholder-content {
+    background: var(--dashboard-accent) !important;
+    opacity: 0.2 !important;
+    border-radius: var(--widget-radius);
+}
+
+/* ========================================
+   Add Widget FAB
+   ======================================== */
+
+.add-widget-fab {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: none;
+    background: var(--dashboard-accent);
+    color: white;
+    font-size: 2rem;
+    font-weight: 300;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4);
+    transition: all 0.2s ease;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.add-widget-fab:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 30px rgba(59, 130, 246, 0.5);
+}
+
+.add-widget-fab span {
+    line-height: 1;
+    margin-top: -2px;
+}
+
+/* ========================================
+   Widget Picker Modal
+   ======================================== */
+
+.widget-picker {
+    position: fixed;
+    bottom: 100px;
+    right: 24px;
+    width: 320px;
+    max-height: 400px;
+    background: var(--dashboard-surface);
+    border: 1px solid var(--dashboard-border);
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    z-index: 101;
+    overflow: hidden;
+    animation: picker-slide-up 0.2s ease;
+}
+
+@keyframes picker-slide-up {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.widget-picker-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--dashboard-border);
+}
+
+.widget-picker-header h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--dashboard-text);
+}
+
+.picker-close {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: none;
+    background: var(--dashboard-border);
+    color: var(--dashboard-text-dim);
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.picker-close:hover {
+    background: var(--dashboard-text-dim);
+    color: var(--dashboard-bg);
+}
+
+.widget-picker-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    padding: 16px;
+    max-height: 320px;
+    overflow-y: auto;
+}
+
+.widget-picker-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 20px 16px;
+    background: var(--dashboard-bg);
+    border: 1px solid var(--dashboard-border);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.widget-picker-item:hover {
+    border-color: var(--dashboard-accent);
+    background: rgba(59, 130, 246, 0.1);
+}
+
+.picker-item-icon {
+    font-size: 2rem;
+}
+
+.picker-item-name {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--dashboard-text);
+    text-align: center;
+}
+
+/* ========================================
+   Utility Classes
+   ======================================== */
+
+.hidden {
+    display: none !important;
+}
+
+/* ========================================
+   Responsive
+   ======================================== */
+
+@media (max-width: 768px) {
+    .dashboard-header {
+        padding: 0 12px;
+    }
+
+    .dashboard-title {
+        font-size: 1rem;
+    }
+
+    .dashboard-date {
+        display: none;
+    }
+
+    .grid-stack {
+        padding: 12px;
+    }
+
+    .add-widget-fab {
+        bottom: 16px;
+        right: 16px;
+        width: 48px;
+        height: 48px;
+        font-size: 1.5rem;
+    }
+
+    .widget-picker {
+        left: 16px;
+        right: 16px;
+        width: auto;
+        bottom: 80px;
+    }
+}
+
+/* ========================================
+   Scrollbar
+   ======================================== */
+
+.grid-stack::-webkit-scrollbar,
+.widget-picker-grid::-webkit-scrollbar {
+    width: 8px;
+}
+
+.grid-stack::-webkit-scrollbar-track,
+.widget-picker-grid::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.grid-stack::-webkit-scrollbar-thumb,
+.widget-picker-grid::-webkit-scrollbar-thumb {
+    background: var(--dashboard-border);
+    border-radius: 4px;
+}
+
+.grid-stack::-webkit-scrollbar-thumb:hover,
+.widget-picker-grid::-webkit-scrollbar-thumb:hover {
+    background: #333;
+}

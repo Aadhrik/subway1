@@ -2,112 +2,111 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Grand St - NYC Subway Departures</title>
-  <meta name="description" content="Real-time B and D train departures from Grand St station">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=VT323&family=Roboto+Mono:wght@400;700&family=Inter:wght@300;400;600;700&family=Playfair+Display:wght@400;700&family=Space+Grotesk:wght@400;500;700&display=swap"
-    rel="stylesheet">
-  <link rel="stylesheet" href="themes/base.css">
-  <link rel="stylesheet" href="themes/led-matrix.css" id="theme-stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Dashboard</title>
+    <meta name="description" content="Smart Home Dashboard">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@200;300;400;500;600;700&family=VT323&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Gridstack CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/gridstack@10.0.0/dist/gridstack.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/gridstack@10.0.0/dist/gridstack-extra.min.css" rel="stylesheet">
+    
+    <!-- Dashboard Styles -->
+    <link rel="stylesheet" href="dashboard.css">
+    
+    <!-- Widget Styles -->
+    <link rel="stylesheet" href="widgets/subway/subway.css">
+    <link rel="stylesheet" href="widgets/weather/weather.css">
+    <link rel="stylesheet" href="widgets/timepiece/timepiece.css">
+    <link rel="stylesheet" href="widgets/flip-clock/flip-clock.css">
 </head>
 
 <body>
-  <!-- Theme Switcher -->
-  <nav class="theme-switcher" style="display: none;">
-    <span class="theme-label">Theme:</span>
-    <button class="theme-btn active" data-theme="led-matrix" title="LED Matrix">
-      <span class="theme-icon">◉</span>
-    </button>
-    <button class="theme-btn" data-theme="pixel-matrix" title="Pixel Matrix">
-      <span class="theme-icon">▦</span>
-    </button>
-    <button class="theme-btn" data-theme="split-flap" title="Split-Flap">
-      <span class="theme-icon">▤</span>
-    </button>
-    <button class="theme-btn" data-theme="solari-board" title="Solari Board">
-      <span class="theme-icon">▥</span>
-    </button>
-    <button class="theme-btn" data-theme="glassmorphism" title="Glassmorphism">
-      <span class="theme-icon">◈</span>
-    </button>
-    <button class="theme-btn" data-theme="swiss" title="Swiss Design">
-      <span class="theme-icon">▢</span>
-    </button>
-  </nav>
+    <div id="dashboard"></div>
 
-  <div class="board">
-    <header class="station-header">
-      <h1 class="station-name">Grand St</h1>
-      <div class="direction">Uptown & The Bronx</div>
-      <div id="current-time" class="current-time"></div>
-    </header>
+    <!-- Gridstack JS -->
+    <script src="https://cdn.jsdelivr.net/npm/gridstack@10.0.0/dist/gridstack-all.min.js"></script>
+    
+    <!-- Core Framework -->
+    <script src="widgets/widget-base.js"></script>
+    <script src="dashboard.js"></script>
+    
+    <!-- Widgets -->
+    <script src="widgets/subway/subway-widget.js"></script>
+    <script src="widgets/weather/weather-widget.js"></script>
+    <script src="widgets/timepiece/timepiece-widget.js"></script>
+    <script src="widgets/flip-clock/flip-clock-widget.js"></script>
+    
+    <!-- Initialize Dashboard -->
+    <script>
+        // Create dashboard
+        const dashboard = new Dashboard({
+            title: 'Home Dashboard',
+            showHeader: true,
+            columns: 12,
+            cellHeight: 70,
+            margin: 12
+        });
+        
+        // Register available widgets (for the "Add Widget" picker)
+        dashboard.registerWidget('weather', WeatherWidget, {
+            displayName: 'Weather',
+            icon: '🌤',
+            gridW: 4,
+            gridH: 5,
+            locationName: 'New York',
+            latitude: 40.7128,
+            longitude: -74.0060
+        });
+        
+        dashboard.registerWidget('subway', SubwayWidget, {
+            displayName: 'Subway',
+            icon: '🚇',
+            gridW: 8,
+            gridH: 5,
+            safetyBufferMinutes: 2
+        });
 
-    <main class="departures">
-      <div class="line-row" id="line-b">
-        <div class="line-header">
-          <div class="line-badge badge-b">B</div>
-          <div class="arrivals" id="arrivals-b">
-            <span class="loading">Loading...</span>
-          </div>
-        </div>
-        <div class="train-track-container" id="track-b">
-          <!-- Train icons will be injected here -->
-          <div class="track-line"></div>
-          <div class="station-marker"></div>
-        </div>
-      </div>
+        dashboard.registerWidget('timepiece', TimepieceWidget, {
+            displayName: 'Watch',
+            icon: '⌚',
+            gridW: 4,
+            gridH: 4
+        });
 
-      <div class="line-row" id="line-d">
-        <div class="line-header">
-          <div class="line-badge badge-d">D</div>
-          <div class="arrivals" id="arrivals-d">
-            <span class="loading">Loading...</span>
-          </div>
-        </div>
-        <div class="train-track-container" id="track-d">
-          <!-- Train icons will be injected here -->
-          <div class="track-line"></div>
-          <div class="station-marker"></div>
-        </div>
-      </div>
-    </main>
+        dashboard.registerWidget('flip-clock', FlipClockWidget, {
+            displayName: 'Flip Clock',
+            icon: '🕐',
+            gridW: 5,
+            gridH: 3,
+            showSeconds: true
+        });
+        
+        // Initialize
+        dashboard.init('#dashboard');
+        
+        // Add default widgets (positions will be loaded from localStorage if saved)
+        dashboard.addWidget(new WeatherWidget({
+            locationName: 'New York',
+            latitude: 40.7128,
+            longitude: -74.0060
+        }), { w: 4, h: 5, x: 0, y: 0, minW: 3, minH: 4 });
+        
+        dashboard.addWidget(new SubwayWidget({
+            safetyBufferMinutes: 2
+        }), { w: 8, h: 5, x: 4, y: 0, minW: 4, minH: 4 });
 
-    <footer class="update-info">
-      <span id="last-update"></span>
-    </footer>
-  </div>
+        dashboard.addWidget(new TimepieceWidget({}), { w: 4, h: 4, x: 0, y: 5, minW: 3, minH: 3 });
 
-  <script src="app.js"></script>
-  <script>
-    // Theme Switcher Logic
-    const themeButtons = document.querySelectorAll('.theme-btn');
-    const themeStylesheet = document.getElementById('theme-stylesheet');
-
-    themeButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const theme = btn.dataset.theme;
-        themeStylesheet.href = `themes/${theme}.css`;
-
-        themeButtons.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-
-        localStorage.setItem('subway-theme', theme);
-      });
-    });
-
-    // Load saved theme
-    const savedTheme = localStorage.getItem('subway-theme');
-    if (savedTheme) {
-      themeStylesheet.href = `themes/${savedTheme}.css`;
-      themeButtons.forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.theme === savedTheme);
-      });
-    }
-  </script>
+        dashboard.addWidget(new FlipClockWidget({
+            showSeconds: true
+        }), { w: 5, h: 3, x: 4, y: 5, minW: 4, minH: 3 });
+    </script>
 </body>
 
 </html>

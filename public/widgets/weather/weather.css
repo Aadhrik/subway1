@@ -1,0 +1,367 @@
+/**
+ * Weather Widget Styles
+ * Apple Weather inspired - clean, modern, elegant
+ */
+
+/* ========================================
+   Base & Typography
+   ======================================== */
+
+.weather-widget {
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    height: 100%;
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+    transition: background 0.8s ease;
+}
+
+.weather-content {
+    height: 100%;
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    z-index: 1;
+}
+
+/* ========================================
+   Weather Gradients (Time & Condition Based)
+   ======================================== */
+
+.weather-widget.gradient-clear {
+    background: linear-gradient(180deg, 
+        #4A90D9 0%, 
+        #74B9FF 50%,
+        #A8D8FF 100%);
+}
+
+.weather-widget.gradient-clear.night {
+    background: linear-gradient(180deg, 
+        #1a1a2e 0%, 
+        #16213e 50%,
+        #0f3460 100%);
+}
+
+.weather-widget.gradient-cloudy {
+    background: linear-gradient(180deg, 
+        #636e72 0%, 
+        #b2bec3 50%,
+        #dfe6e9 100%);
+}
+
+.weather-widget.gradient-cloudy.night {
+    background: linear-gradient(180deg, 
+        #2d3436 0%, 
+        #485460 50%,
+        #636e72 100%);
+}
+
+.weather-widget.gradient-overcast {
+    background: linear-gradient(180deg, 
+        #636e72 0%, 
+        #808e9b 50%,
+        #a5b1c2 100%);
+}
+
+.weather-widget.gradient-overcast.night {
+    background: linear-gradient(180deg, 
+        #1e272e 0%, 
+        #2f3640 50%,
+        #485460 100%);
+}
+
+.weather-widget.gradient-rain {
+    background: linear-gradient(180deg, 
+        #4b6584 0%, 
+        #778ca3 50%,
+        #a5b1c2 100%);
+}
+
+.weather-widget.gradient-rain.night {
+    background: linear-gradient(180deg, 
+        #1e272e 0%, 
+        #2c3e50 50%,
+        #34495e 100%);
+}
+
+.weather-widget.gradient-storm {
+    background: linear-gradient(180deg, 
+        #2c3e50 0%, 
+        #4b6584 50%,
+        #778ca3 100%);
+}
+
+.weather-widget.gradient-snow {
+    background: linear-gradient(180deg, 
+        #a5b1c2 0%, 
+        #dfe6e9 50%,
+        #f5f6fa 100%);
+    color: #2d3436;
+}
+
+.weather-widget.gradient-snow .weather-location,
+.weather-widget.gradient-snow .weather-condition,
+.weather-widget.gradient-snow .weather-range,
+.weather-widget.gradient-snow .detail-label,
+.weather-widget.gradient-snow .forecast-name,
+.weather-widget.gradient-snow .forecast-low {
+    color: #636e72;
+}
+
+.weather-widget.gradient-fog {
+    background: linear-gradient(180deg, 
+        #b2bec3 0%, 
+        #dfe6e9 50%,
+        #f5f6fa 100%);
+    color: #2d3436;
+}
+
+.weather-widget.gradient-fog .weather-location,
+.weather-widget.gradient-fog .weather-condition,
+.weather-widget.gradient-fog .weather-range,
+.weather-widget.gradient-fog .detail-label,
+.weather-widget.gradient-fog .forecast-name,
+.weather-widget.gradient-fog .forecast-low {
+    color: #636e72;
+}
+
+.weather-widget.gradient-default {
+    background: linear-gradient(180deg, 
+        #4A90D9 0%, 
+        #74B9FF 100%);
+}
+
+/* ========================================
+   Main Weather Display
+   ======================================== */
+
+.weather-main {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.weather-location {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+}
+
+.weather-temp {
+    font-size: 5rem;
+    font-weight: 200;
+    color: #fff;
+    line-height: 1;
+    letter-spacing: -4px;
+    margin: 4px 0;
+}
+
+.weather-condition {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: 4px;
+}
+
+.weather-range {
+    font-size: 1rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.8);
+    letter-spacing: 0.5px;
+}
+
+/* ========================================
+   Weather Details Grid
+   ======================================== */
+
+.weather-details {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.weather-detail {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.detail-label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.7);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.detail-value {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #fff;
+}
+
+/* ========================================
+   5-Day Forecast
+   ======================================== */
+
+.weather-forecast {
+    display: flex;
+    justify-content: space-between;
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 16px 12px;
+    margin-top: auto;
+}
+
+.forecast-day {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+}
+
+.forecast-name {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.8);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.forecast-icon {
+    font-size: 1.4rem;
+    line-height: 1;
+}
+
+.forecast-temps {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.forecast-high {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #fff;
+}
+
+.forecast-low {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* ========================================
+   Loading State
+   ======================================== */
+
+.weather-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    border-radius: 16px;
+    background: linear-gradient(180deg, #4A90D9 0%, #74B9FF 100%);
+}
+
+.weather-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: weather-spin 1s linear infinite;
+}
+
+@keyframes weather-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ========================================
+   Error State
+   ======================================== */
+
+.weather-error {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    background: linear-gradient(180deg, #636e72 0%, #b2bec3 100%);
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+/* ========================================
+   Responsive
+   ======================================== */
+
+@media (max-width: 480px) {
+    .weather-content {
+        padding: 20px;
+    }
+
+    .weather-temp {
+        font-size: 4rem;
+    }
+
+    .weather-details {
+        gap: 8px;
+    }
+
+    .weather-detail {
+        padding: 10px 12px;
+    }
+
+    .detail-value {
+        font-size: 1.1rem;
+    }
+
+    .forecast-day {
+        gap: 6px;
+    }
+
+    .forecast-icon {
+        font-size: 1.2rem;
+    }
+}
+
+/* Smaller widget size adjustments */
+.widget-small .weather-details,
+.widget-medium .weather-details {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+}
+
+.widget-small .weather-temp {
+    font-size: 3.5rem;
+}
+
+.widget-small .weather-forecast {
+    display: none;
+}
+
+.widget-small .weather-detail {
+    padding: 8px 10px;
+}
+
+.widget-small .detail-label {
+    font-size: 0.65rem;
+}
+
+.widget-small .detail-value {
+    font-size: 1rem;
+}
+
