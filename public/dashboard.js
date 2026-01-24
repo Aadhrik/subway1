@@ -42,6 +42,12 @@ class Dashboard {
         const screenHeight = window.innerHeight;
         const aspectRatio = screenWidth / screenHeight;
         
+        // Check if we're in fullscreen mode (no header)
+        const isFullscreen = document.fullscreenElement || 
+                            document.webkitFullscreenElement || 
+                            document.mozFullScreenElement || 
+                            document.msFullscreenElement;
+        
         // Detect 16:10 tablet (aspect ratio between 1.5 and 1.7)
         const isTablet16x10 = aspectRatio >= 1.5 && aspectRatio <= 1.7 && screenWidth >= 1200;
         const isHighDpiTablet = screenWidth >= 2000 && screenHeight >= 1400;
@@ -51,19 +57,19 @@ class Dashboard {
         let margin = (typeof config.margin === 'number') ? config.margin : 12;
         let targetRows = 8; // Target number of rows to fill the screen
         
-        // Header height (matches CSS)
-        let headerHeight = 60;
+        // Header height (matches CSS) - 0 in fullscreen since header is hidden
+        let headerHeight = isFullscreen ? 0 : 60;
         let gridPadding = 16;
         
         if (isHighDpiTablet) {
             // Xiaomi Redmi Pad 2 or similar high-res tablet
-            headerHeight = 72;
+            headerHeight = isFullscreen ? 0 : 72;
             gridPadding = 24;
             margin = 16;
             targetRows = 8; // 8 rows fits well for 16:10
         } else if (isTablet16x10) {
             // Standard 16:10 tablet
-            headerHeight = 56;
+            headerHeight = isFullscreen ? 0 : 56;
             gridPadding = 20;
             margin = 14;
             targetRows = 8;
@@ -77,7 +83,7 @@ class Dashboard {
         // Solving for cellHeight: cellHeight = (availableHeight - (targetRows - 1) * margin) / targetRows
         const cellHeight = Math.floor((availableHeight - (targetRows - 1) * margin) / targetRows);
         
-        console.log(`[Dashboard] Screen: ${screenWidth}x${screenHeight}, Aspect: ${aspectRatio.toFixed(2)}`);
+        console.log(`[Dashboard] Screen: ${screenWidth}x${screenHeight}, Aspect: ${aspectRatio.toFixed(2)}, Fullscreen: ${isFullscreen ? 'Yes' : 'No'}`);
         console.log(`[Dashboard] Tablet: ${isTablet16x10 ? 'Yes' : 'No'}, High-DPI: ${isHighDpiTablet ? 'Yes' : 'No'}`);
         console.log(`[Dashboard] Grid: ${columns} cols, ${targetRows} rows, cell height: ${cellHeight}px, margin: ${margin}px`);
         
@@ -87,7 +93,8 @@ class Dashboard {
             margin,
             targetRows,
             isTablet: isTablet16x10,
-            isHighDpiTablet
+            isHighDpiTablet,
+            isFullscreen
         };
     }
 
@@ -128,6 +135,22 @@ class Dashboard {
                 ${this.config.showHeader ? this.renderHeader() : ''}
                 <div class="grid-stack"></div>
                 ${this.renderWidgetPicker()}
+                ${this.renderFullscreenExitZone()}
+            </div>
+        `;
+    }
+
+    /**
+     * Render the fullscreen exit zone (double-tap to exit)
+     */
+    renderFullscreenExitZone() {
+        return `
+            <div class="fullscreen-exit-zone" title="Double-tap to exit fullscreen">
+                <div class="fullscreen-exit-dot"></div>
+            </div>
+            <div class="fullscreen-hint">
+                <span class="fullscreen-hint-icon">👆</span>
+                Double-tap top-right corner to exit
             </div>
         `;
     }
@@ -383,6 +406,8 @@ class Dashboard {
      * Add a widget to the dashboard
      */
     addWidget(widget, gridOptions = {}) {
+        // Store the original widget type before adding timestamp
+        const baseType = widget.id;
         const id = widget.id + '-' + Date.now();
         widget.id = id;
         
@@ -400,7 +425,7 @@ class Dashboard {
         `;
 
         // Get saved position or use defaults
-        const savedPos = this.savedLayout?.[widget.id.split('-')[0]];
+        const savedPos = this.getSavedPosition(baseType);
         const options = {
             w: savedPos?.w || gridOptions.w || 4,
             h: savedPos?.h || gridOptions.h || 4,
@@ -440,20 +465,42 @@ class Dashboard {
     }
 
     /**
+     * Extract base widget type from full widget ID
+     * e.g., 'flip-clock-1737693847283' -> 'flip-clock'
+     *       'subway-1737693847283' -> 'subway'
+     */
+    getBaseWidgetType(fullWidgetId) {
+        if (!fullWidgetId) return null;
+        // Widget ID format: {type}-{timestamp}
+        // Timestamp is always 13 digits at the end
+        const match = fullWidgetId.match(/^(.+)-\d{13,}$/);
+        return match ? match[1] : fullWidgetId;
+    }
+
+    /**
      * Save layout to localStorage and server
+     * Saves both positions AND which widgets are active
      */
     saveLayout() {
-        const layout = {};
+        const layout = {
+            widgets: {},      // Widget positions
+            activeWidgets: [] // List of active widget types
+        };
+        
         this.grid.getGridItems().forEach(item => {
             const widgetId = item.querySelector('.widget-wrapper')?.dataset.widgetId;
             if (widgetId) {
-                const baseId = widgetId.split('-')[0];
-                layout[baseId] = {
+                const baseId = this.getBaseWidgetType(widgetId);
+                layout.widgets[baseId] = {
                     x: parseInt(item.getAttribute('gs-x')),
                     y: parseInt(item.getAttribute('gs-y')),
                     w: parseInt(item.getAttribute('gs-w')),
                     h: parseInt(item.getAttribute('gs-h'))
                 };
+                // Track which widgets are active
+                if (!layout.activeWidgets.includes(baseId)) {
+                    layout.activeWidgets.push(baseId);
+                }
             }
         });
         
@@ -462,6 +509,34 @@ class Dashboard {
         
         // Sync to server (debounced)
         this.syncToServer(layout);
+    }
+    
+    /**
+     * Check if a widget type should be shown (exists in saved state)
+     * Returns true if no saved state exists (first load) or if widget is in active list
+     */
+    shouldShowWidget(widgetType) {
+        const saved = this.savedLayout;
+        // No saved state = first load, show all defaults
+        if (!saved || !saved.activeWidgets) {
+            return true;
+        }
+        return saved.activeWidgets.includes(widgetType);
+    }
+    
+    /**
+     * Get saved position for a widget type
+     */
+    getSavedPosition(widgetType) {
+        const saved = this.savedLayout;
+        if (saved?.widgets?.[widgetType]) {
+            return saved.widgets[widgetType];
+        }
+        // Legacy format support (just positions object)
+        if (saved?.[widgetType] && !saved.widgets) {
+            return saved[widgetType];
+        }
+        return null;
     }
 
     /**
@@ -596,8 +671,99 @@ class Dashboard {
         events.forEach(event => {
             document.addEventListener(event, () => {
                 this.updateFullscreenButton();
+                this.onFullscreenChange();
             });
         });
+
+        // Setup double-tap to exit fullscreen
+        this.setupFullscreenExitZone();
+    }
+
+    /**
+     * Handle fullscreen state changes
+     */
+    onFullscreenChange() {
+        const isFullscreen = document.fullscreenElement || 
+                            document.webkitFullscreenElement || 
+                            document.mozFullScreenElement || 
+                            document.msFullscreenElement;
+
+        if (isFullscreen) {
+            // Entering fullscreen - show hint briefly
+            this.showFullscreenHint();
+        }
+
+        // Recalculate grid after a short delay to let the DOM update
+        setTimeout(() => {
+            const newConfig = this.calculateOptimalGrid(this.config);
+            if (Math.abs(newConfig.cellHeight - this.config.cellHeight) > 5) {
+                this.config.cellHeight = newConfig.cellHeight;
+                this.grid.cellHeight(newConfig.cellHeight);
+                this.updateGridVariables();
+                console.log(`[Dashboard] Grid recalculated for ${isFullscreen ? 'fullscreen' : 'windowed'} mode`);
+            }
+        }, 100);
+    }
+
+    /**
+     * Show a brief hint when entering fullscreen
+     */
+    showFullscreenHint() {
+        const hint = this.container.querySelector('.fullscreen-hint');
+        if (hint) {
+            hint.classList.add('visible');
+            setTimeout(() => {
+                hint.classList.remove('visible');
+            }, 2500);
+        }
+    }
+
+    /**
+     * Setup double-tap detection for fullscreen exit zone
+     */
+    setupFullscreenExitZone() {
+        const exitZone = this.container.querySelector('.fullscreen-exit-zone');
+        if (!exitZone) return;
+
+        let lastTap = 0;
+        const doubleTapDelay = 400; // ms
+
+        const handleTap = (e) => {
+            e.preventDefault();
+            const now = Date.now();
+            
+            // Visual feedback
+            exitZone.classList.add('tapped');
+            setTimeout(() => exitZone.classList.remove('tapped'), 200);
+
+            if (now - lastTap < doubleTapDelay) {
+                // Double tap detected - exit fullscreen
+                this.exitFullscreen();
+                lastTap = 0;
+            } else {
+                lastTap = now;
+            }
+        };
+
+        // Support both touch and click
+        exitZone.addEventListener('touchend', handleTap, { passive: false });
+        exitZone.addEventListener('click', handleTap);
+    }
+
+    /**
+     * Exit fullscreen mode
+     */
+    exitFullscreen() {
+        const exitFullscreen = document.exitFullscreen || 
+                             document.webkitExitFullscreen || 
+                             document.mozCancelFullScreen || 
+                             document.msExitFullscreen;
+        
+        if (exitFullscreen) {
+            exitFullscreen.call(document).catch(err => {
+                console.warn('Exit fullscreen failed:', err);
+            });
+        }
     }
 
     /**

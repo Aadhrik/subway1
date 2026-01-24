@@ -117,22 +117,32 @@
         // Initialize
         dashboard.init('#dashboard');
         
-        // Add default widgets (positions will be loaded from localStorage if saved)
-        dashboard.addWidget(new WeatherWidget({
-            locationName: 'New York',
-            latitude: 40.7128,
-            longitude: -74.0060
-        }), widgetSizes.weather);
+        // Add default widgets - only if they should be shown (weren't deleted)
+        // On first load, all widgets are shown. After that, only saved ones appear.
         
-        dashboard.addWidget(new SubwayWidget({
-            safetyBufferMinutes: 2
-        }), widgetSizes.subway);
+        if (dashboard.shouldShowWidget('weather')) {
+            dashboard.addWidget(new WeatherWidget({
+                locationName: 'New York',
+                latitude: 40.7128,
+                longitude: -74.0060
+            }), widgetSizes.weather);
+        }
+        
+        if (dashboard.shouldShowWidget('subway')) {
+            dashboard.addWidget(new SubwayWidget({
+                safetyBufferMinutes: 2
+            }), widgetSizes.subway);
+        }
 
-        dashboard.addWidget(new TimepieceWidget({}), widgetSizes.timepiece);
+        if (dashboard.shouldShowWidget('timepiece')) {
+            dashboard.addWidget(new TimepieceWidget({}), widgetSizes.timepiece);
+        }
 
-        dashboard.addWidget(new FlipClockWidget({
-            showSeconds: true
-        }), widgetSizes.flipClock);
+        if (dashboard.shouldShowWidget('flip-clock')) {
+            dashboard.addWidget(new FlipClockWidget({
+                showSeconds: true
+            }), widgetSizes.flipClock);
+        }
         
         // Log tablet detection
         if (isTablet16x10) {

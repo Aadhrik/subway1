@@ -650,7 +650,10 @@ body {
     }
 }
 
-/* Fullscreen mode optimizations */
+/* ========================================
+   Fullscreen Mode - Header Hidden
+   ======================================== */
+
 :fullscreen .dashboard,
 :-webkit-full-screen .dashboard,
 :-moz-full-screen .dashboard {
@@ -658,24 +661,93 @@ body {
     height: 100dvh;
 }
 
+:fullscreen .dashboard-header,
+:-webkit-full-screen .dashboard-header,
+:-moz-full-screen .dashboard-header {
+    display: none;
+}
+
 :fullscreen .grid-stack,
 :-webkit-full-screen .grid-stack,
 :-moz-full-screen .grid-stack {
+    height: 100vh;
+    height: 100dvh;
     overflow: hidden;
 }
 
-/* Hide header in fullscreen for more space (optional - can be toggled) */
-.dashboard.fullscreen-compact .dashboard-header {
-    height: 40px;
-    padding: 0 16px;
+/* Fullscreen Exit Zone - subtle indicator in top-right corner */
+.fullscreen-exit-zone {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 80px;
+    height: 80px;
+    z-index: 9999;
+    cursor: pointer;
+    display: none;
+    align-items: flex-start;
+    justify-content: flex-end;
+    padding: 12px;
+    background: linear-gradient(135deg, transparent 50%, rgba(255,255,255,0.03) 100%);
+    -webkit-tap-highlight-color: transparent;
 }
 
-.dashboard.fullscreen-compact .dashboard-title {
-    font-size: 1rem;
+/* Only show in fullscreen */
+:fullscreen .fullscreen-exit-zone,
+:-webkit-full-screen .fullscreen-exit-zone,
+:-moz-full-screen .fullscreen-exit-zone {
+    display: flex;
 }
 
-.dashboard.fullscreen-compact .dashboard-clock {
-    font-size: 0.85rem;
+.fullscreen-exit-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+    transition: all 0.3s ease;
+}
+
+.fullscreen-exit-zone:hover .fullscreen-exit-dot,
+.fullscreen-exit-zone:active .fullscreen-exit-dot {
+    background: rgba(255, 255, 255, 0.5);
+    transform: scale(1.5);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+/* Visual feedback on tap */
+.fullscreen-exit-zone.tapped .fullscreen-exit-dot {
+    background: var(--dashboard-accent);
+    transform: scale(2);
+}
+
+/* Hint that appears briefly when entering fullscreen */
+.fullscreen-hint {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: rgba(255, 255, 255, 0.9);
+    padding: 16px 24px;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    z-index: 10000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    text-align: center;
+    line-height: 1.5;
+}
+
+.fullscreen-hint.visible {
+    opacity: 1;
+}
+
+.fullscreen-hint-icon {
+    display: block;
+    font-size: 1.5rem;
+    margin-bottom: 8px;
 }
 
 /* ========================================
