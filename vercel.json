@@ -3,10 +3,5 @@
   "framework": null,
   "installCommand": "npm install",
   "buildCommand": "mkdir -p .vercel_output && cp -r public/* .vercel_output/",
-  "outputDirectory": ".vercel_output",
-  "functions": {
-    "api/*.js": {
-      "runtime": "@vercel/node@3"
-    }
-  }
+  "outputDirectory": ".vercel_output"
 }
