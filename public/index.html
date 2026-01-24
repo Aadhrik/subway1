@@ -3,9 +3,13 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Home Dashboard</title>
     <meta name="description" content="Smart Home Dashboard">
+    <meta name="theme-color" content="#0a0a0a">
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -44,21 +48,44 @@
     
     <!-- Initialize Dashboard -->
     <script>
-        // Create dashboard
+        // Detect if we're on a 16:10 tablet (like Xiaomi Redmi Pad 2)
+        const isTablet16x10 = (() => {
+            const w = window.innerWidth;
+            const h = window.innerHeight;
+            const aspect = w / h;
+            return aspect >= 1.5 && aspect <= 1.7 && w >= 1200;
+        })();
+        
+        // Create dashboard with auto-calculated dimensions
         const dashboard = new Dashboard({
             title: 'Home Dashboard',
             showHeader: true,
             columns: 12,
-            cellHeight: 70,
-            margin: 12
+            cellHeight: 'auto', // Auto-calculate based on screen
+            margin: 'auto'      // Auto-calculate based on screen
         });
+        
+        // Widget sizes optimized for 8-row grid on 16:10 tablet
+        // Row 1-4: Weather (4 cols) + Subway (8 cols) - fills top half
+        // Row 5-8: Timepiece (4 cols) + Flip Clock (4 cols) + Space for more widgets
+        const widgetSizes = isTablet16x10 ? {
+            weather: { w: 4, h: 4, x: 0, y: 0, minW: 3, minH: 3 },
+            subway: { w: 8, h: 4, x: 4, y: 0, minW: 4, minH: 3 },
+            timepiece: { w: 4, h: 4, x: 0, y: 4, minW: 3, minH: 3 },
+            flipClock: { w: 4, h: 4, x: 4, y: 4, minW: 3, minH: 2 }
+        } : {
+            weather: { w: 4, h: 5, x: 0, y: 0, minW: 3, minH: 4 },
+            subway: { w: 8, h: 5, x: 4, y: 0, minW: 4, minH: 4 },
+            timepiece: { w: 4, h: 4, x: 0, y: 5, minW: 3, minH: 3 },
+            flipClock: { w: 5, h: 3, x: 4, y: 5, minW: 4, minH: 3 }
+        };
         
         // Register available widgets (for the "Add Widget" picker)
         dashboard.registerWidget('weather', WeatherWidget, {
             displayName: 'Weather',
             icon: '🌤',
-            gridW: 4,
-            gridH: 5,
+            gridW: widgetSizes.weather.w,
+            gridH: widgetSizes.weather.h,
             locationName: 'New York',
             latitude: 40.7128,
             longitude: -74.0060
@@ -67,23 +94,23 @@
         dashboard.registerWidget('subway', SubwayWidget, {
             displayName: 'Subway',
             icon: '🚇',
-            gridW: 8,
-            gridH: 5,
+            gridW: widgetSizes.subway.w,
+            gridH: widgetSizes.subway.h,
             safetyBufferMinutes: 2
         });
 
         dashboard.registerWidget('timepiece', TimepieceWidget, {
             displayName: 'Watch',
             icon: '⌚',
-            gridW: 4,
-            gridH: 4
+            gridW: widgetSizes.timepiece.w,
+            gridH: widgetSizes.timepiece.h
         });
 
         dashboard.registerWidget('flip-clock', FlipClockWidget, {
             displayName: 'Flip Clock',
             icon: '🕐',
-            gridW: 5,
-            gridH: 3,
+            gridW: widgetSizes.flipClock.w,
+            gridH: widgetSizes.flipClock.h,
             showSeconds: true
         });
         
@@ -95,17 +122,22 @@
             locationName: 'New York',
             latitude: 40.7128,
             longitude: -74.0060
-        }), { w: 4, h: 5, x: 0, y: 0, minW: 3, minH: 4 });
+        }), widgetSizes.weather);
         
         dashboard.addWidget(new SubwayWidget({
             safetyBufferMinutes: 2
-        }), { w: 8, h: 5, x: 4, y: 0, minW: 4, minH: 4 });
+        }), widgetSizes.subway);
 
-        dashboard.addWidget(new TimepieceWidget({}), { w: 4, h: 4, x: 0, y: 5, minW: 3, minH: 3 });
+        dashboard.addWidget(new TimepieceWidget({}), widgetSizes.timepiece);
 
         dashboard.addWidget(new FlipClockWidget({
             showSeconds: true
-        }), { w: 5, h: 3, x: 4, y: 5, minW: 4, minH: 3 });
+        }), widgetSizes.flipClock);
+        
+        // Log tablet detection
+        if (isTablet16x10) {
+            console.log('[Dashboard] 16:10 tablet detected - using optimized layout');
+        }
     </script>
 </body>
 

@@ -462,3 +462,116 @@
     pointer-events: none;
     z-index: 20;
 }
+
+/* ========================================
+   High-DPI Tablet (16:10 - Xiaomi Redmi Pad 2)
+   ======================================== */
+
+@media screen and (min-width: 2000px) and (min-height: 1400px) and (max-aspect-ratio: 17/10) and (min-aspect-ratio: 15/10) {
+    .flip-clock-widget {
+        gap: 48px;
+        padding: 32px;
+        border-radius: 20px;
+    }
+    
+    .fc-clock {
+        gap: 20px;
+    }
+    
+    .fc-group {
+        gap: 12px;
+    }
+    
+    .fc-flip {
+        width: 90px;
+        height: 130px;
+        border-radius: 12px;
+    }
+    
+    .fc-flip::before {
+        border-radius: 12px;
+    }
+    
+    .fc-static::before {
+        border-radius: 12px 12px 0 0;
+    }
+    
+    .fc-static::after {
+        border-radius: 0 0 12px 12px;
+    }
+    
+    .fc-flip-front {
+        border-radius: 12px 12px 0 0;
+    }
+    
+    .fc-flip-back {
+        border-radius: 0 0 12px 12px;
+    }
+    
+    .fc-digit {
+        font-size: 5.5rem;
+    }
+    
+    .fc-separator {
+        height: 130px;
+        gap: 24px;
+    }
+    
+    .fc-colon {
+        font-size: 3rem;
+    }
+    
+    .fc-ampm {
+        font-size: 1.1rem;
+        letter-spacing: 3px;
+        margin-left: 12px;
+    }
+    
+    .fc-date {
+        gap: 8px;
+    }
+    
+    .fc-weekday {
+        font-size: 1.5rem;
+    }
+    
+    .fc-fulldate {
+        font-size: 1.15rem;
+    }
+    
+    /* Seconds cards */
+    .fc-seconds .fc-flip {
+        width: 72px;
+        height: 104px;
+    }
+    
+    .fc-seconds .fc-digit {
+        font-size: 4.2rem;
+    }
+}
+
+/* Standard 16:10 tablet (1200px+) */
+@media screen and (min-width: 1200px) and (min-height: 700px) and (max-aspect-ratio: 17/10) and (min-aspect-ratio: 15/10) {
+    .flip-clock-widget {
+        gap: 40px;
+        padding: 28px;
+    }
+    
+    .fc-flip {
+        width: 75px;
+        height: 108px;
+        border-radius: 10px;
+    }
+    
+    .fc-digit {
+        font-size: 4.2rem;
+    }
+    
+    .fc-separator {
+        height: 108px;
+    }
+    
+    .fc-colon {
+        font-size: 2.4rem;
+    }
+}

@@ -11,18 +11,84 @@ class Dashboard {
         this.widgetRegistry = new Map(); // Available widget types
         this.isEditMode = false;
         
+        // Calculate optimal cell height for the screen
+        const optimalConfig = this.calculateOptimalGrid(config);
+        
         this.config = {
             title: config.title || 'Home Dashboard',
             showHeader: config.showHeader !== false,
-            columns: config.columns || 12,
-            rowHeight: config.rowHeight || 70,
-            cellHeight: config.cellHeight || 70,
-            margin: config.margin || 12,
-            ...config
+            columns: optimalConfig.columns,
+            rowHeight: optimalConfig.cellHeight,
+            cellHeight: optimalConfig.cellHeight,
+            margin: optimalConfig.margin,
+            targetRows: optimalConfig.targetRows,
+            isTablet: optimalConfig.isTablet,
+            ...config,
+            // Override with calculated values if auto
+            cellHeight: config.cellHeight === 'auto' ? optimalConfig.cellHeight : (config.cellHeight || optimalConfig.cellHeight),
+            margin: config.margin === 'auto' ? optimalConfig.margin : (config.margin || optimalConfig.margin)
         };
         
         // Load saved layout
         this.savedLayout = this.loadLayout();
+    }
+
+    /**
+     * Calculate optimal grid dimensions based on screen size
+     * Optimized for 16:10 tablets like Xiaomi Redmi Pad 2 (2560x1600)
+     */
+    calculateOptimalGrid(config) {
+        const screenWidth = window.innerWidth;
+        const screenHeight = window.innerHeight;
+        const aspectRatio = screenWidth / screenHeight;
+        
+        // Detect 16:10 tablet (aspect ratio between 1.5 and 1.7)
+        const isTablet16x10 = aspectRatio >= 1.5 && aspectRatio <= 1.7 && screenWidth >= 1200;
+        const isHighDpiTablet = screenWidth >= 2000 && screenHeight >= 1400;
+        
+        // Default configuration
+        let columns = config.columns || 12;
+        let margin = config.margin || 12;
+        let targetRows = 8; // Target number of rows to fill the screen
+        
+        // Header height (matches CSS)
+        let headerHeight = 60;
+        let gridPadding = 16;
+        
+        if (isHighDpiTablet) {
+            // Xiaomi Redmi Pad 2 or similar high-res tablet
+            headerHeight = 72;
+            gridPadding = 24;
+            margin = 16;
+            targetRows = 8; // 8 rows fits well for 16:10
+        } else if (isTablet16x10) {
+            // Standard 16:10 tablet
+            headerHeight = 56;
+            gridPadding = 20;
+            margin = 14;
+            targetRows = 8;
+        }
+        
+        // Calculate available height for the grid
+        const availableHeight = screenHeight - headerHeight - (gridPadding * 2);
+        
+        // Calculate cell height to fit exactly targetRows
+        // Formula: availableHeight = (targetRows * cellHeight) + ((targetRows - 1) * margin)
+        // Solving for cellHeight: cellHeight = (availableHeight - (targetRows - 1) * margin) / targetRows
+        const cellHeight = Math.floor((availableHeight - (targetRows - 1) * margin) / targetRows);
+        
+        console.log(`[Dashboard] Screen: ${screenWidth}x${screenHeight}, Aspect: ${aspectRatio.toFixed(2)}`);
+        console.log(`[Dashboard] Tablet: ${isTablet16x10 ? 'Yes' : 'No'}, High-DPI: ${isHighDpiTablet ? 'Yes' : 'No'}`);
+        console.log(`[Dashboard] Grid: ${columns} cols, ${targetRows} rows, cell height: ${cellHeight}px, margin: ${margin}px`);
+        
+        return {
+            columns,
+            cellHeight: Math.max(cellHeight, 60), // Minimum cell height of 60px
+            margin,
+            targetRows,
+            isTablet: isTablet16x10,
+            isHighDpiTablet
+        };
     }
 
     /**
@@ -122,6 +188,56 @@ class Dashboard {
         // Save layout on change
         this.grid.on('change', () => {
             this.saveLayout();
+        });
+
+        // Update CSS variables for edit mode grid lines
+        this.updateGridVariables();
+        
+        // Handle orientation changes on tablet
+        this.setupResizeHandler();
+    }
+
+    /**
+     * Update CSS variables for grid visualization
+     */
+    updateGridVariables() {
+        const root = document.documentElement;
+        root.style.setProperty('--grid-cell-height', `${this.config.cellHeight}px`);
+        root.style.setProperty('--grid-columns', this.config.columns);
+        root.style.setProperty('--grid-margin', `${this.config.margin}px`);
+    }
+
+    /**
+     * Handle window resize (especially for tablet orientation changes)
+     */
+    setupResizeHandler() {
+        let resizeTimeout;
+        
+        const handleResize = () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                // Recalculate grid dimensions
+                const newConfig = this.calculateOptimalGrid(this.config);
+                
+                // Only update if significantly different
+                if (Math.abs(newConfig.cellHeight - this.config.cellHeight) > 10) {
+                    this.config.cellHeight = newConfig.cellHeight;
+                    this.config.margin = newConfig.margin;
+                    
+                    // Update gridstack
+                    this.grid.cellHeight(newConfig.cellHeight);
+                    this.grid.margin(newConfig.margin);
+                    this.updateGridVariables();
+                    
+                    console.log('[Dashboard] Grid updated after resize');
+                }
+            }, 250);
+        };
+        
+        window.addEventListener('resize', handleResize);
+        window.addEventListener('orientationchange', () => {
+            // Delay slightly for orientation change to complete
+            setTimeout(handleResize, 100);
         });
     }
 
