@@ -23,6 +23,8 @@
     flex-direction: column;
     position: relative;
     z-index: 1;
+    justify-content: space-between;
+    overflow: hidden;
 }
 
 /* ========================================
@@ -375,68 +377,78 @@
     }
     
     .weather-content {
-        padding: 32px;
+        padding: 24px;
+    }
+    
+    .weather-main {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin-bottom: 16px;
     }
     
     .weather-location {
-        font-size: 1.5rem;
+        font-size: 1.3rem;
     }
     
     .weather-temp {
-        font-size: 7rem;
-        letter-spacing: -5px;
+        font-size: 5rem;
+        letter-spacing: -4px;
     }
     
     .weather-condition {
-        font-size: 1.5rem;
+        font-size: 1.3rem;
     }
     
     .weather-range {
-        font-size: 1.3rem;
+        font-size: 1.1rem;
     }
     
     .weather-details {
-        gap: 14px;
-        margin-bottom: 24px;
+        gap: 10px;
+        margin-bottom: 16px;
+        grid-template-columns: repeat(2, 1fr);
     }
     
     .weather-detail {
-        border-radius: 16px;
-        padding: 16px 18px;
-        gap: 6px;
+        border-radius: 12px;
+        padding: 12px 14px;
+        gap: 4px;
     }
     
     .detail-label {
-        font-size: 1rem;
+        font-size: 0.85rem;
     }
     
     .detail-value {
-        font-size: 1.6rem;
-    }
-    
-    .weather-forecast {
-        border-radius: 20px;
-        padding: 20px 14px;
-    }
-    
-    .forecast-day {
-        gap: 10px;
-    }
-    
-    .forecast-name {
-        font-size: 1.1rem;
-    }
-    
-    .forecast-icon {
-        font-size: 2rem;
-    }
-    
-    .forecast-high {
         font-size: 1.3rem;
     }
     
+    .weather-forecast {
+        border-radius: 16px;
+        padding: 14px 10px;
+        flex-shrink: 0;
+    }
+    
+    .forecast-day {
+        gap: 6px;
+    }
+    
+    .forecast-name {
+        font-size: 0.9rem;
+    }
+    
+    .forecast-icon {
+        font-size: 1.5rem;
+    }
+    
+    .forecast-high {
+        font-size: 1rem;
+    }
+    
     .forecast-low {
-        font-size: 1.1rem;
+        font-size: 0.9rem;
     }
 }
 

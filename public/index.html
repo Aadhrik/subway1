@@ -66,13 +66,12 @@
         });
         
         // Widget sizes optimized for 8-row grid on 16:10 tablet
-        // Row 1-4: Weather (4 cols) + Subway (8 cols) - fills top half
-        // Row 5-8: Timepiece (4 cols) + Flip Clock (4 cols) + Space for more widgets
+        // Layout: Subway (8 cols, left, full height) + Weather (4 cols, right, full height)
         const widgetSizes = isTablet16x10 ? {
-            weather: { w: 4, h: 4, x: 0, y: 0, minW: 3, minH: 3 },
-            subway: { w: 8, h: 4, x: 4, y: 0, minW: 4, minH: 3 },
-            timepiece: { w: 4, h: 4, x: 0, y: 4, minW: 3, minH: 3 },
-            flipClock: { w: 4, h: 4, x: 4, y: 4, minW: 3, minH: 2 }
+            subway: { w: 8, h: 8, x: 0, y: 0, minW: 4, minH: 4 },
+            weather: { w: 4, h: 8, x: 8, y: 0, minW: 3, minH: 4 },
+            timepiece: { w: 4, h: 4, x: 0, y: 8, minW: 3, minH: 3 },
+            flipClock: { w: 4, h: 4, x: 4, y: 8, minW: 3, minH: 2 }
         } : {
             weather: { w: 4, h: 5, x: 0, y: 0, minW: 3, minH: 4 },
             subway: { w: 8, h: 5, x: 4, y: 0, minW: 4, minH: 4 },
