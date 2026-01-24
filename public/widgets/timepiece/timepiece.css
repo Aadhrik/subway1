@@ -466,105 +466,79 @@
 }
 
 /* ========================================
-   High-DPI Tablet (16:10 - Xiaomi Redmi Pad 2)
-   11" screen at 2560x1600 = ~274 PPI
+   Tablet 16:10 (Xiaomi Redmi Pad 2, etc.)
    ======================================== */
 
-@media screen and (min-width: 2000px) and (min-height: 1400px) and (max-aspect-ratio: 17/10) and (min-aspect-ratio: 15/10) {
+@media screen and (min-width: 800px) and (max-aspect-ratio: 18/10) and (min-aspect-ratio: 14/10) {
     .timepiece-widget {
-        gap: 32px;
-        padding: 32px;
-        border-radius: 24px;
+        gap: 20px;
+        padding: 24px;
+        border-radius: 20px;
     }
     
     .tp-watch {
-        width: min(450px, 85%);
+        width: min(300px, 85%);
     }
     
     .tp-diamond {
-        width: 18px;
-        height: 18px;
-        margin-left: -9px;
+        width: 12px;
+        height: 12px;
+        margin-left: -6px;
     }
     
     .tp-hour-marker {
-        width: 7px;
-        height: 28px;
+        width: 5px;
+        height: 18px;
     }
     
     .tp-hour-marker.large {
-        width: 10px;
-        height: 38px;
+        width: 7px;
+        height: 26px;
     }
     
     .tp-date-window {
-        width: 48px;
-        height: 36px;
+        width: 32px;
+        height: 24px;
     }
     
     .tp-date {
-        font-size: 1.4rem;
+        font-size: 0.9rem;
     }
     
     .tp-hour {
-        width: 10px;
-        margin-left: -5px;
-    }
-    
-    .tp-minute {
         width: 7px;
         margin-left: -3.5px;
     }
     
+    .tp-minute {
+        width: 5px;
+        margin-left: -2.5px;
+    }
+    
     .tp-second {
-        width: 3px;
-        margin-left: -1.5px;
+        width: 2px;
+        margin-left: -1px;
     }
     
     .tp-center {
-        width: 20px;
-        height: 20px;
-        margin: -10px 0 0 -10px;
+        width: 14px;
+        height: 14px;
+        margin: -7px 0 0 -7px;
     }
     
     .tp-caption {
-        max-width: 450px;
+        max-width: 300px;
     }
     
     .tp-weekday {
-        font-size: 1.8rem;
+        font-size: 1.2rem;
     }
     
     .tp-monthday {
-        font-size: 1.4rem;
+        font-size: 0.95rem;
     }
     
     .tp-digital {
-        font-size: 1.6rem;
-    }
-}
-
-/* Standard 16:10 tablet (1200px+) */
-@media screen and (min-width: 1200px) and (min-height: 700px) and (max-aspect-ratio: 17/10) and (min-aspect-ratio: 15/10) {
-    .tp-watch {
-        width: min(380px, 85%);
-    }
-    
-    .tp-diamond {
-        width: 14px;
-        height: 14px;
-        margin-left: -7px;
-    }
-    
-    .tp-weekday {
-        font-size: 1.4rem;
-    }
-    
-    .tp-monthday {
         font-size: 1.1rem;
-    }
-    
-    .tp-digital {
-        font-size: 1.3rem;
     }
 }
