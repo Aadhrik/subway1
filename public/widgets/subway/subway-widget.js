@@ -63,7 +63,13 @@ class SubwayWidget extends Widget {
         return `
             <div class="subway-board">
                 <header class="subway-header">
-                    <h2 class="station-name">Grand St</h2>
+                    <div class="header-top">
+                        <h2 class="station-name">Grand St</h2>
+                        <div class="header-datetime">
+                            <div class="header-time"></div>
+                            <div class="header-date"></div>
+                        </div>
+                    </div>
                     <div class="direction">Uptown & The Bronx</div>
                 </header>
 
@@ -107,11 +113,35 @@ class SubwayWidget extends Widget {
         this.initTrack('b');
         this.initTrack('d');
 
-        // Start real-time updates
+        // Start clock and real-time updates
+        this.updateHeaderDateTime();
+        this.clockIntervalId = setInterval(() => this.updateHeaderDateTime(), 1000);
         this.realtimeIntervalId = setInterval(() => this.updateRealTime(), 1000);
 
         // Initial data fetch
         this.refresh();
+    }
+
+    updateHeaderDateTime() {
+        const now = new Date();
+        
+        const timeEl = this.$('.header-time');
+        if (timeEl) {
+            timeEl.textContent = now.toLocaleTimeString('en-US', {
+                hour: 'numeric',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+        }
+        
+        const dateEl = this.$('.header-date');
+        if (dateEl) {
+            dateEl.textContent = now.toLocaleDateString('en-US', {
+                weekday: 'short',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
     }
 
     initTrack(line) {
@@ -286,6 +316,9 @@ class SubwayWidget extends Widget {
         super.destroy();
         if (this.realtimeIntervalId) {
             clearInterval(this.realtimeIntervalId);
+        }
+        if (this.clockIntervalId) {
+            clearInterval(this.clockIntervalId);
         }
     }
 }

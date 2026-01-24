@@ -31,10 +31,16 @@
 
 /* Header */
 .subway-header {
-    text-align: center;
     margin-bottom: 24px;
     padding-bottom: 16px;
     border-bottom: 2px solid #1a1a1a;
+}
+
+.subway-board .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
 }
 
 .subway-board .station-name {
@@ -48,12 +54,44 @@
     animation: flicker 4s infinite alternate;
 }
 
+/* White LED DateTime Display */
+.subway-board .header-datetime {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+}
+
+.subway-board .header-time {
+    font-size: 2.2rem;
+    font-weight: normal;
+    color: #ffffff;
+    text-shadow: 
+        0 0 10px rgba(255, 255, 255, 0.9),
+        0 0 20px rgba(255, 255, 255, 0.6),
+        0 0 30px rgba(255, 255, 255, 0.4),
+        0 0 40px rgba(255, 255, 255, 0.2);
+    letter-spacing: 2px;
+    font-variant-numeric: tabular-nums;
+}
+
+.subway-board .header-date {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.7);
+    text-shadow: 
+        0 0 8px rgba(255, 255, 255, 0.5),
+        0 0 16px rgba(255, 255, 255, 0.3);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
 .subway-board .direction {
     font-size: 1.1rem;
     color: var(--led-amber-dim);
-    margin-top: 6px;
+    margin-top: 8px;
     letter-spacing: 2px;
     text-shadow: 0 0 8px rgba(255, 102, 0, 0.5);
+    text-align: center;
 }
 
 /* Departures */
@@ -538,12 +576,21 @@
     }
     
     .subway-board .station-name {
-        font-size: 3rem;
-        letter-spacing: 4px;
+        font-size: 2.5rem;
+        letter-spacing: 3px;
+    }
+    
+    .subway-board .header-time {
+        font-size: 2.5rem;
+        letter-spacing: 3px;
+    }
+    
+    .subway-board .header-date {
+        font-size: 1.1rem;
     }
     
     .subway-board .direction {
-        font-size: 1.3rem;
+        font-size: 1.2rem;
         margin-top: 8px;
         letter-spacing: 2px;
     }
