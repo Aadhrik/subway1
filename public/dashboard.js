@@ -46,9 +46,9 @@ class Dashboard {
         const isTablet16x10 = aspectRatio >= 1.5 && aspectRatio <= 1.7 && screenWidth >= 1200;
         const isHighDpiTablet = screenWidth >= 2000 && screenHeight >= 1400;
         
-        // Default configuration
-        let columns = config.columns || 12;
-        let margin = config.margin || 12;
+        // Default configuration (handle 'auto' strings)
+        let columns = (typeof config.columns === 'number') ? config.columns : 12;
+        let margin = (typeof config.margin === 'number') ? config.margin : 12;
         let targetRows = 8; // Target number of rows to fill the screen
         
         // Header height (matches CSS)
