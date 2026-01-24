@@ -46,7 +46,8 @@ class Dashboard {
         const isFullscreen = document.fullscreenElement || 
                             document.webkitFullscreenElement || 
                             document.mozFullScreenElement || 
-                            document.msFullscreenElement;
+                            document.msFullscreenElement ||
+                            this.container?.querySelector('.dashboard.is-fullscreen');
         
         // Detect 16:10 tablet (aspect ratio between 1.5 and 1.7)
         const isTablet16x10 = aspectRatio >= 1.5 && aspectRatio <= 1.7 && screenWidth >= 1200;
@@ -688,9 +689,17 @@ class Dashboard {
                             document.mozFullScreenElement || 
                             document.msFullscreenElement;
 
+        const dashboard = this.container.querySelector('.dashboard');
+        
         if (isFullscreen) {
-            // Entering fullscreen - show hint briefly
+            // Entering fullscreen
+            dashboard.classList.add('is-fullscreen');
             this.showFullscreenHint();
+            console.log('[Dashboard] Entered fullscreen mode');
+        } else {
+            // Exiting fullscreen
+            dashboard.classList.remove('is-fullscreen');
+            console.log('[Dashboard] Exited fullscreen mode');
         }
 
         // Recalculate grid after a short delay to let the DOM update

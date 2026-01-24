@@ -652,24 +652,19 @@ body {
 
 /* ========================================
    Fullscreen Mode - Header Hidden
+   Uses .is-fullscreen class for reliable cross-browser support
    ======================================== */
 
-:fullscreen .dashboard,
-:-webkit-full-screen .dashboard,
-:-moz-full-screen .dashboard {
+.dashboard.is-fullscreen {
     height: 100vh;
     height: 100dvh;
 }
 
-:fullscreen .dashboard-header,
-:-webkit-full-screen .dashboard-header,
-:-moz-full-screen .dashboard-header {
-    display: none;
+.dashboard.is-fullscreen .dashboard-header {
+    display: none !important;
 }
 
-:fullscreen .grid-stack,
-:-webkit-full-screen .grid-stack,
-:-moz-full-screen .grid-stack {
+.dashboard.is-fullscreen .grid-stack {
     height: 100vh;
     height: 100dvh;
     overflow: hidden;
@@ -693,9 +688,7 @@ body {
 }
 
 /* Only show in fullscreen */
-:fullscreen .fullscreen-exit-zone,
-:-webkit-full-screen .fullscreen-exit-zone,
-:-moz-full-screen .fullscreen-exit-zone {
+.dashboard.is-fullscreen .fullscreen-exit-zone {
     display: flex;
 }
 
