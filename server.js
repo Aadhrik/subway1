@@ -1,5 +1,7 @@
 const express = require('express');
 const cors = require('cors');
+const fs = require('fs').promises;
+const path = require('path');
 const GtfsRealtimeBindings = require('gtfs-realtime-bindings');
 
 const app = express();
@@ -14,7 +16,11 @@ const STOP_ID = 'D21N';
 // Lines we care about
 const TARGET_LINES = ['B', 'D'];
 
+// Dashboard state file (for local development)
+const STATE_FILE = path.join(__dirname, '.dashboard-state.json');
+
 app.use(cors());
+app.use(express.json());
 app.use(express.static('public'));
 
 // Parse route_id to get line letter (e.g., "B" from "B..N" or just "B")
@@ -91,6 +97,63 @@ app.get('/api/arrivals', async (req, res) => {
         console.error('Error fetching MTA data:', error);
         res.status(500).json({
             error: 'Failed to fetch train data',
+            message: error.message
+        });
+    }
+});
+
+// ==================== Dashboard State API ====================
+
+// Load dashboard state
+app.get('/api/dashboard-state', async (req, res) => {
+    try {
+        const data = await fs.readFile(STATE_FILE, 'utf8');
+        const state = JSON.parse(data);
+        res.json({
+            success: true,
+            data: state,
+            timestamp: Date.now()
+        });
+    } catch (error) {
+        // File doesn't exist or is invalid - return null state
+        res.json({
+            success: true,
+            data: null,
+            timestamp: Date.now()
+        });
+    }
+});
+
+// Save dashboard state
+app.post('/api/dashboard-state', async (req, res) => {
+    try {
+        const { layout } = req.body;
+        
+        if (!layout) {
+            return res.status(400).json({
+                success: false,
+                error: 'Missing layout data'
+            });
+        }
+
+        const stateData = {
+            layout,
+            savedAt: Date.now(),
+            version: 1
+        };
+
+        await fs.writeFile(STATE_FILE, JSON.stringify(stateData, null, 2));
+
+        res.json({
+            success: true,
+            message: 'State saved',
+            timestamp: Date.now()
+        });
+    } catch (error) {
+        console.error('Error saving dashboard state:', error);
+        res.status(500).json({
+            success: false,
+            error: 'Failed to save state',
             message: error.message
         });
     }

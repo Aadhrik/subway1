@@ -440,7 +440,7 @@ class Dashboard {
     }
 
     /**
-     * Save layout to localStorage
+     * Save layout to localStorage and server
      */
     saveLayout() {
         const layout = {};
@@ -456,13 +456,51 @@ class Dashboard {
                 };
             }
         });
+        
+        // Save to localStorage as backup
         localStorage.setItem('dashboard-layout', JSON.stringify(layout));
+        
+        // Sync to server (debounced)
+        this.syncToServer(layout);
     }
 
     /**
-     * Load layout from localStorage
+     * Sync layout to server (debounced to avoid too many requests)
+     */
+    syncToServer(layout) {
+        // Clear any pending sync
+        if (this.syncTimeout) {
+            clearTimeout(this.syncTimeout);
+        }
+        
+        // Debounce server sync by 2 seconds
+        this.syncTimeout = setTimeout(async () => {
+            try {
+                const response = await fetch('/api/dashboard-state', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ layout })
+                });
+                
+                if (response.ok) {
+                    console.log('[Dashboard] Layout synced to server');
+                } else {
+                    console.warn('[Dashboard] Failed to sync layout to server');
+                }
+            } catch (error) {
+                console.warn('[Dashboard] Could not sync to server:', error.message);
+            }
+        }, 2000);
+    }
+
+    /**
+     * Load layout from server, fallback to localStorage
      */
     loadLayout() {
+        // Return localStorage data synchronously for initial render
+        // Server data will be loaded async and trigger update if different
         try {
             return JSON.parse(localStorage.getItem('dashboard-layout')) || {};
         } catch {
@@ -471,10 +509,37 @@ class Dashboard {
     }
 
     /**
+     * Load layout from server (async)
+     */
+    async loadLayoutFromServer() {
+        try {
+            const response = await fetch('/api/dashboard-state');
+            if (response.ok) {
+                const result = await response.json();
+                if (result.success && result.data?.layout) {
+                    console.log('[Dashboard] Layout loaded from server');
+                    // Update localStorage with server data
+                    localStorage.setItem('dashboard-layout', JSON.stringify(result.data.layout));
+                    return result.data.layout;
+                }
+            }
+        } catch (error) {
+            console.warn('[Dashboard] Could not load from server:', error.message);
+        }
+        return null;
+    }
+
+    /**
      * Clear saved layout
      */
     clearLayout() {
         localStorage.removeItem('dashboard-layout');
+        // Also clear from server
+        fetch('/api/dashboard-state', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ layout: {} })
+        }).catch(() => {});
         location.reload();
     }
 

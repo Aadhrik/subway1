@@ -65,7 +65,6 @@ class SubwayWidget extends Widget {
                 <header class="subway-header">
                     <h2 class="station-name">Grand St</h2>
                     <div class="direction">Uptown & The Bronx</div>
-                    <div class="current-time"></div>
                 </header>
 
                 <div class="subway-departures">
@@ -108,10 +107,7 @@ class SubwayWidget extends Widget {
         this.initTrack('b');
         this.initTrack('d');
 
-        // Start clock and real-time updates
-        this.updateCurrentTime();
-        setInterval(() => this.updateCurrentTime(), 1000);
-        
+        // Start real-time updates
         this.realtimeIntervalId = setInterval(() => this.updateRealTime(), 1000);
 
         // Initial data fetch
@@ -237,13 +233,6 @@ class SubwayWidget extends Widget {
             container.classList.add('track-arriving');
         } else {
             container.classList.remove('track-arriving');
-        }
-    }
-
-    updateCurrentTime() {
-        const el = this.$('.current-time');
-        if (el) {
-            el.textContent = this.formatTime(new Date());
         }
     }
 

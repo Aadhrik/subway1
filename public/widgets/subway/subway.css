@@ -55,14 +55,6 @@
     text-shadow: 0 0 8px rgba(255, 102, 0, 0.5);
 }
 
-.subway-board .current-time {
-    font-size: 1.5rem;
-    color: var(--led-amber);
-    margin-top: 12px;
-    letter-spacing: 3px;
-    text-shadow: var(--glow-spread);
-}
-
 /* Departures */
 .subway-departures {
     display: flex;
