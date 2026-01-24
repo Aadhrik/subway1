@@ -366,77 +366,109 @@
 }
 
 /* ========================================
-   Tablet 16:10 (Xiaomi Redmi Pad 2, etc.)
+   High-DPI Tablet (16:10 - Xiaomi Redmi Pad 2)
+   11" screen at 2560x1600 = ~274 PPI
    ======================================== */
 
-@media screen and (min-width: 800px) and (max-aspect-ratio: 18/10) and (min-aspect-ratio: 14/10) {
+@media screen and (min-width: 2000px) and (min-height: 1400px) and (max-aspect-ratio: 17/10) and (min-aspect-ratio: 15/10) {
     .weather-widget {
-        border-radius: 20px;
+        border-radius: 24px;
     }
     
     .weather-content {
-        padding: 32px;
+        padding: 48px;
     }
     
     .weather-location {
-        font-size: 1.5rem;
-    }
-    
-    .weather-temp {
-        font-size: 7rem;
-        letter-spacing: -5px;
-    }
-    
-    .weather-condition {
-        font-size: 1.5rem;
-    }
-    
-    .weather-range {
-        font-size: 1.3rem;
-    }
-    
-    .weather-details {
-        gap: 14px;
-        margin-bottom: 24px;
-    }
-    
-    .weather-detail {
-        border-radius: 16px;
-        padding: 16px 18px;
-        gap: 6px;
-    }
-    
-    .detail-label {
-        font-size: 1rem;
-    }
-    
-    .detail-value {
-        font-size: 1.6rem;
-    }
-    
-    .weather-forecast {
-        border-radius: 20px;
-        padding: 20px 14px;
-    }
-    
-    .forecast-day {
-        gap: 10px;
-    }
-    
-    .forecast-name {
-        font-size: 1.1rem;
-    }
-    
-    .forecast-icon {
         font-size: 2rem;
     }
     
-    .forecast-high {
+    .weather-temp {
+        font-size: 10rem;
+        letter-spacing: -8px;
+    }
+    
+    .weather-condition {
+        font-size: 2rem;
+    }
+    
+    .weather-range {
+        font-size: 1.8rem;
+    }
+    
+    .weather-details {
+        gap: 20px;
+        margin-bottom: 32px;
+    }
+    
+    .weather-detail {
+        border-radius: 20px;
+        padding: 20px 24px;
+        gap: 8px;
+    }
+    
+    .detail-label {
         font-size: 1.3rem;
     }
     
+    .detail-value {
+        font-size: 2.2rem;
+    }
+    
+    .weather-forecast {
+        border-radius: 24px;
+        padding: 28px 20px;
+    }
+    
+    .forecast-day {
+        gap: 14px;
+    }
+    
+    .forecast-name {
+        font-size: 1.5rem;
+    }
+    
+    .forecast-icon {
+        font-size: 2.8rem;
+    }
+    
+    .forecast-high {
+        font-size: 1.8rem;
+    }
+    
     .forecast-low {
+        font-size: 1.5rem;
+    }
+}
+
+/* Standard 16:10 tablet (1200px+) */
+@media screen and (min-width: 1200px) and (min-height: 700px) and (max-aspect-ratio: 17/10) and (min-aspect-ratio: 15/10) {
+    .weather-content {
+        padding: 40px;
+    }
+    
+    .weather-location {
+        font-size: 1.6rem;
+    }
+    
+    .weather-temp {
+        font-size: 8rem;
+    }
+    
+    .weather-condition {
+        font-size: 1.6rem;
+    }
+    
+    .weather-details {
+        gap: 16px;
+    }
+    
+    .detail-label {
         font-size: 1.1rem;
+    }
+    
+    .detail-value {
+        font-size: 1.8rem;
     }
 }
 

@@ -493,16 +493,14 @@ body {
 
 /* ========================================
    Tablet Optimization (16:10 Aspect Ratio)
-   Xiaomi Redmi Pad 2 and similar tablets
-   CSS viewport is typically ~1280x800
+   Xiaomi Redmi Pad 2: 2560x1600
    ======================================== */
 
 /* Target 16:10 aspect ratio tablets in landscape */
-@media screen and (min-width: 800px) and (max-aspect-ratio: 18/10) and (min-aspect-ratio: 14/10) {
+@media screen and (min-width: 1200px) and (min-height: 700px) and (max-aspect-ratio: 17/10) and (min-aspect-ratio: 15/10) {
     :root {
         --header-height: 56px;
-        --grid-padding: 16px;
-        --widget-radius: 16px;
+        --grid-padding: 20px;
     }
     
     html, body {
@@ -519,11 +517,11 @@ body {
     
     .dashboard-header {
         height: var(--header-height);
-        padding: 0 20px;
+        padding: 0 24px;
     }
     
     .dashboard-title {
-        font-size: 1.4rem;
+        font-size: 1.5rem;
     }
     
     .dashboard-clock {
@@ -545,7 +543,109 @@ body {
     }
     
     .edit-toggle {
-        padding: 10px 16px;
+        padding: 10px 18px;
+        font-size: 0.95rem;
+    }
+}
+
+/* High-DPI tablet specific (Xiaomi Redmi Pad 2) */
+@media screen and (min-width: 2000px) and (min-height: 1400px) and (max-aspect-ratio: 17/10) and (min-aspect-ratio: 15/10) {
+    :root {
+        --header-height: 72px;
+        --grid-padding: 24px;
+        --widget-radius: 20px;
+    }
+    
+    .dashboard-header {
+        padding: 0 32px;
+    }
+    
+    .dashboard-title {
+        font-size: 1.75rem;
+        letter-spacing: -0.75px;
+    }
+    
+    .dashboard-clock {
+        font-size: 1.15rem;
+    }
+    
+    .dashboard-time {
+        font-weight: 500;
+    }
+    
+    .fullscreen-toggle {
+        width: 48px;
+        height: 48px;
+        font-size: 1.5rem;
+    }
+    
+    .edit-toggle {
+        padding: 12px 24px;
+        font-size: 1.1rem;
+        border-radius: 10px;
+    }
+    
+    .edit-icon {
+        font-size: 1.2rem;
+    }
+    
+    /* Widget wrapper adjustments */
+    .widget-drag-handle {
+        height: 40px;
+    }
+    
+    .drag-dots {
+        font-size: 1.2rem;
+    }
+    
+    .widget-delete {
+        width: 32px;
+        height: 32px;
+        font-size: 1.2rem;
+        top: 12px;
+        right: 12px;
+    }
+    
+    /* Larger FAB */
+    .add-widget-fab {
+        width: 72px;
+        height: 72px;
+        font-size: 2.5rem;
+        bottom: 32px;
+        right: 32px;
+    }
+    
+    /* Widget picker */
+    .widget-picker {
+        width: 400px;
+        bottom: 120px;
+        right: 32px;
+        border-radius: 20px;
+    }
+    
+    .widget-picker-header {
+        padding: 20px 24px;
+    }
+    
+    .widget-picker-header h3 {
+        font-size: 1.2rem;
+    }
+    
+    .widget-picker-grid {
+        gap: 16px;
+        padding: 20px;
+    }
+    
+    .widget-picker-item {
+        padding: 24px 20px;
+        border-radius: 16px;
+    }
+    
+    .picker-item-icon {
+        font-size: 2.5rem;
+    }
+    
+    .picker-item-name {
         font-size: 1rem;
     }
 }

@@ -519,58 +519,143 @@
 }
 
 /* ========================================
-   Tablet 16:10 (Xiaomi Redmi Pad 2, etc.)
-   CSS viewport is typically ~1280x800 on these devices
+   High-DPI Tablet (16:10 - Xiaomi Redmi Pad 2)
+   11" screen at 2560x1600 = ~274 PPI
+   Text needs to be MUCH larger to be readable
    ======================================== */
 
-@media screen and (min-width: 800px) and (max-aspect-ratio: 18/10) and (min-aspect-ratio: 14/10) {
+@media screen and (min-width: 2000px) and (min-height: 1400px) and (max-aspect-ratio: 17/10) and (min-aspect-ratio: 15/10) {
     .subway-board {
-        padding: 32px;
-        border-radius: 20px;
+        padding: 40px;
+        border-radius: 24px;
     }
     
     .subway-header {
-        margin-bottom: 28px;
-        padding-bottom: 20px;
+        margin-bottom: 40px;
+        padding-bottom: 24px;
+    }
+    
+    .subway-board .station-name {
+        font-size: 5rem;
+        letter-spacing: 8px;
+    }
+    
+    .subway-board .direction {
+        font-size: 2rem;
+        margin-top: 12px;
+        letter-spacing: 4px;
+    }
+    
+    .subway-departures {
+        gap: 28px;
+    }
+    
+    .subway-board .line-row {
+        padding: 28px;
+        border-radius: 16px;
+    }
+    
+    .subway-board .line-header {
+        gap: 28px;
+    }
+    
+    .subway-board .line-badge {
+        width: 100px;
+        height: 100px;
+        font-size: 3.5rem;
+    }
+    
+    .subway-board .arrivals {
+        gap: 40px;
+    }
+    
+    .subway-board .arrival-time {
+        font-size: 5rem;
+        letter-spacing: 4px;
+    }
+    
+    .subway-board .arrival-time .unit {
+        font-size: 2.5rem;
+    }
+    
+    .subway-board .arrival-clock {
+        font-size: 1.8rem;
+    }
+    
+    .subway-board .loading,
+    .subway-board .no-service {
+        font-size: 2.5rem;
+    }
+    
+    /* Train Track Visualization */
+    .subway-board .train-track-container {
+        height: 100px;
+        margin-top: 24px;
+    }
+    
+    .subway-board .track-line {
+        height: 8px;
+    }
+    
+    .subway-board .station-marker {
+        width: 12px;
+        height: 60px;
+    }
+    
+    .subway-board .station-marker::after {
+        font-size: 1.2rem;
+        bottom: -28px;
+    }
+    
+    .subway-board .train-body {
+        width: 80px;
+        height: 32px;
+        border-radius: 10px 5px 5px 10px;
+    }
+    
+    .subway-board .train-body::before {
+        left: -8px;
+        width: 12px;
+        height: 18px;
+    }
+    
+    .subway-board .train-tooltip {
+        font-size: 2rem;
+        margin-bottom: 14px;
+    }
+    
+    .subway-board .tick-label {
+        font-size: 1.2rem;
+    }
+    
+    .subway-footer {
+        padding-top: 20px;
+        font-size: 1.5rem;
+    }
+}
+
+/* Standard 16:10 tablet (1200px+) */
+@media screen and (min-width: 1200px) and (min-height: 700px) and (max-aspect-ratio: 17/10) and (min-aspect-ratio: 15/10) {
+    .subway-board {
+        padding: 32px;
     }
     
     .subway-board .station-name {
         font-size: 4rem;
-        letter-spacing: 6px;
     }
     
     .subway-board .direction {
         font-size: 1.6rem;
-        margin-top: 10px;
-        letter-spacing: 3px;
-    }
-    
-    .subway-departures {
-        gap: 20px;
-    }
-    
-    .subway-board .line-row {
-        padding: 20px;
-        border-radius: 12px;
-    }
-    
-    .subway-board .line-header {
-        gap: 20px;
     }
     
     .subway-board .line-badge {
-        width: 72px;
-        height: 72px;
-        font-size: 2.5rem;
-    }
-    
-    .subway-board .arrivals {
-        gap: 28px;
+        width: 80px;
+        height: 80px;
+        font-size: 2.8rem;
     }
     
     .subway-board .arrival-time {
         font-size: 4rem;
-        letter-spacing: 3px;
     }
     
     .subway-board .arrival-time .unit {
@@ -579,57 +664,6 @@
     
     .subway-board .arrival-clock {
         font-size: 1.4rem;
-    }
-    
-    .subway-board .loading,
-    .subway-board .no-service {
-        font-size: 2rem;
-    }
-    
-    /* Train Track Visualization */
-    .subway-board .train-track-container {
-        height: 80px;
-        margin-top: 20px;
-    }
-    
-    .subway-board .track-line {
-        height: 6px;
-    }
-    
-    .subway-board .station-marker {
-        width: 10px;
-        height: 50px;
-    }
-    
-    .subway-board .station-marker::after {
-        font-size: 1rem;
-        bottom: -22px;
-    }
-    
-    .subway-board .train-body {
-        width: 60px;
-        height: 26px;
-        border-radius: 8px 4px 4px 8px;
-    }
-    
-    .subway-board .train-body::before {
-        left: -6px;
-        width: 10px;
-        height: 14px;
-    }
-    
-    .subway-board .train-tooltip {
-        font-size: 1.6rem;
-        margin-bottom: 12px;
-    }
-    
-    .subway-board .tick-label {
-        font-size: 1rem;
-    }
-    
-    .subway-footer {
-        padding-top: 16px;
-        font-size: 1.2rem;
     }
 }
 
