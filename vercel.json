@@ -11,14 +11,7 @@
     }
   ],
   "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/api/$1"
-    },
-    {
-      "src": "/(.*\\.(js|css|html|png|jpg|svg|ico|json|woff|woff2|ttf))",
-      "dest": "/public/$1"
-    },
+    { "handle": "filesystem" },
     {
       "src": "/",
       "dest": "/public/index.html"

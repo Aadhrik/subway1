@@ -3,7 +3,7 @@ const cors = require('cors');
 const GtfsRealtimeBindings = require('gtfs-realtime-bindings');
 
 const app = express();
-const PORT = 3000;
+const PORT = 8080;
 
 // MTA feed URL for B/D/F/M trains
 const MTA_FEED_URL = 'https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-bdfm';
