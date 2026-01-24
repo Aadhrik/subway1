@@ -3,18 +3,18 @@
  * LED Dot Matrix theme
  */
 
-/* Widget Variables */
+/* Widget Variables - Glows reduced by 20% */
 .subway-board {
     --bg-dark: #0a0a0a;
     --led-amber: #ff6600;
     --led-amber-bright: #ffa500;
     --led-amber-dim: #cc5200;
     --mta-orange: #ff6319;
-    --glow-color: rgba(255, 102, 0, 0.8);
-    --glow-spread: 0 0 10px var(--glow-color),
-        0 0 20px var(--glow-color),
-        0 0 30px rgba(255, 102, 0, 0.4),
-        0 0 40px rgba(255, 102, 0, 0.2);
+    --glow-color: rgba(255, 102, 0, 0.64);
+    --glow-spread: 0 0 8px var(--glow-color),
+        0 0 16px var(--glow-color),
+        0 0 24px rgba(255, 102, 0, 0.32),
+        0 0 32px rgba(255, 102, 0, 0.16);
     
     font-family: 'VT323', monospace;
     color: var(--led-amber);
@@ -43,6 +43,13 @@
     gap: 16px;
 }
 
+.subway-board .header-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+}
+
 .subway-board .station-name {
     font-size: 2.5rem;
     font-weight: normal;
@@ -54,23 +61,16 @@
     animation: flicker 4s infinite alternate;
 }
 
-/* White LED DateTime Display */
-.subway-board .header-datetime {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 2px;
-}
-
+/* White LED DateTime Display - glows reduced 20% */
 .subway-board .header-time {
     font-size: 2.2rem;
     font-weight: normal;
     color: #ffffff;
     text-shadow: 
-        0 0 10px rgba(255, 255, 255, 0.9),
-        0 0 20px rgba(255, 255, 255, 0.6),
-        0 0 30px rgba(255, 255, 255, 0.4),
-        0 0 40px rgba(255, 255, 255, 0.2);
+        0 0 8px rgba(255, 255, 255, 0.72),
+        0 0 16px rgba(255, 255, 255, 0.48),
+        0 0 24px rgba(255, 255, 255, 0.32),
+        0 0 32px rgba(255, 255, 255, 0.16);
     letter-spacing: 2px;
     font-variant-numeric: tabular-nums;
 }
@@ -79,8 +79,8 @@
     font-size: 1rem;
     color: rgba(255, 255, 255, 0.7);
     text-shadow: 
-        0 0 8px rgba(255, 255, 255, 0.5),
-        0 0 16px rgba(255, 255, 255, 0.3);
+        0 0 6px rgba(255, 255, 255, 0.4),
+        0 0 12px rgba(255, 255, 255, 0.24);
     letter-spacing: 1px;
     text-transform: uppercase;
 }
@@ -88,10 +88,8 @@
 .subway-board .direction {
     font-size: 1.1rem;
     color: var(--led-amber-dim);
-    margin-top: 8px;
     letter-spacing: 2px;
-    text-shadow: 0 0 8px rgba(255, 102, 0, 0.5);
-    text-align: center;
+    text-shadow: 0 0 6px rgba(255, 102, 0, 0.4);
 }
 
 /* Departures */
@@ -119,7 +117,7 @@
     gap: 16px;
 }
 
-/* Line Badges */
+/* Line Badges - glows reduced 20% */
 .subway-board .line-badge {
     width: 48px;
     height: 48px;
@@ -132,8 +130,8 @@
     color: white;
     flex-shrink: 0;
     box-shadow:
-        0 0 15px rgba(255, 99, 25, 0.6),
-        0 0 30px rgba(255, 99, 25, 0.3),
+        0 0 12px rgba(255, 99, 25, 0.48),
+        0 0 24px rgba(255, 99, 25, 0.24),
         inset 0 -3px 8px rgba(0, 0, 0, 0.3);
     font-family: 'Inter', sans-serif;
 }
@@ -175,9 +173,9 @@
 .subway-board .arrival-time.arriving {
     color: #00ff88;
     text-shadow:
-        0 0 10px rgba(0, 255, 136, 0.8),
-        0 0 20px rgba(0, 255, 136, 0.6),
-        0 0 30px rgba(0, 255, 136, 0.4);
+        0 0 8px rgba(0, 255, 136, 0.64),
+        0 0 16px rgba(0, 255, 136, 0.48),
+        0 0 24px rgba(0, 255, 136, 0.32);
     animation: pulse 1s infinite;
 }
 
@@ -255,8 +253,8 @@
         var(--led-amber-bright) 100%);
     border-radius: 3px;
     box-shadow: 
-        0 0 12px var(--led-amber),
-        0 0 24px rgba(255, 102, 0, 0.5);
+        0 0 10px var(--led-amber),
+        0 0 19px rgba(255, 102, 0, 0.4);
 }
 
 .subway-board .station-marker::after {
@@ -340,8 +338,8 @@
     border-radius: 6px 3px 3px 6px;
     position: relative;
     box-shadow: 
-        0 0 14px var(--led-amber),
-        0 0 28px rgba(255, 102, 0, 0.4);
+        0 0 11px var(--led-amber),
+        0 0 22px rgba(255, 102, 0, 0.32);
 }
 
 .subway-board .train-body::before {
@@ -355,8 +353,8 @@
     background: var(--led-amber-bright);
     border-radius: 3px 0 0 3px;
     box-shadow: 
-        -8px 0 16px var(--led-amber),
-        -16px 0 32px rgba(255, 102, 0, 0.5);
+        -6px 0 13px var(--led-amber),
+        -13px 0 26px rgba(255, 102, 0, 0.4);
 }
 
 .subway-board .train-body::after {
@@ -388,30 +386,30 @@
     letter-spacing: 1px;
 }
 
-/* Arriving train */
+/* Arriving train - glows reduced 20% */
 .subway-board .train-icon.arriving .train-body {
     background: linear-gradient(180deg,
         #00ff88 0%,
         #00dd77 50%,
         #00bb66 100%);
     box-shadow: 
-        0 0 20px #00ff88,
-        0 0 40px rgba(0, 255, 136, 0.5);
+        0 0 16px #00ff88,
+        0 0 32px rgba(0, 255, 136, 0.4);
     animation: train-pulse 0.6s ease-in-out infinite;
 }
 
 .subway-board .train-icon.arriving .train-body::before {
     background: #00ff88;
     box-shadow: 
-        -8px 0 20px #00ff88,
-        -18px 0 40px rgba(0, 255, 136, 0.6);
+        -6px 0 16px #00ff88,
+        -14px 0 32px rgba(0, 255, 136, 0.48);
 }
 
 .subway-board .train-icon.arriving .train-tooltip {
     color: #00ff88;
     text-shadow: 
-        0 0 12px rgba(0, 255, 136, 0.9),
-        0 0 24px rgba(0, 255, 136, 0.5);
+        0 0 10px rgba(0, 255, 136, 0.72),
+        0 0 19px rgba(0, 255, 136, 0.4);
     font-size: 1.1rem;
     font-weight: bold;
 }
@@ -460,8 +458,8 @@
         #00dd77 50%,
         #00ff88 100%);
     box-shadow: 
-        0 0 20px #00ff88,
-        0 0 40px rgba(0, 255, 136, 0.6);
+        0 0 16px #00ff88,
+        0 0 32px rgba(0, 255, 136, 0.48);
     animation: station-pulse 0.6s ease-in-out infinite;
 }
 
@@ -505,19 +503,19 @@
 
 @keyframes train-pulse {
     0%, 100% {
-        box-shadow: 0 0 20px #00ff88, 0 0 40px rgba(0, 255, 136, 0.5);
+        box-shadow: 0 0 16px #00ff88, 0 0 32px rgba(0, 255, 136, 0.4);
     }
     50% {
-        box-shadow: 0 0 30px #00ff88, 0 0 60px rgba(0, 255, 136, 0.7);
+        box-shadow: 0 0 24px #00ff88, 0 0 48px rgba(0, 255, 136, 0.56);
     }
 }
 
 @keyframes station-pulse {
     0%, 100% {
-        box-shadow: 0 0 20px #00ff88, 0 0 40px rgba(0, 255, 136, 0.6);
+        box-shadow: 0 0 16px #00ff88, 0 0 32px rgba(0, 255, 136, 0.48);
     }
     50% {
-        box-shadow: 0 0 30px #00ff88, 0 0 60px rgba(0, 255, 136, 0.8);
+        box-shadow: 0 0 24px #00ff88, 0 0 48px rgba(0, 255, 136, 0.64);
     }
 }
 
@@ -576,22 +574,25 @@
     }
     
     .subway-board .station-name {
-        font-size: 2.5rem;
+        font-size: 2.2rem;
         letter-spacing: 3px;
     }
     
     .subway-board .header-time {
-        font-size: 2.5rem;
-        letter-spacing: 3px;
+        font-size: 2.2rem;
+        letter-spacing: 2px;
+    }
+    
+    .subway-board .header-bottom {
+        margin-top: 6px;
     }
     
     .subway-board .header-date {
-        font-size: 1.1rem;
+        font-size: 1rem;
     }
     
     .subway-board .direction {
-        font-size: 1.2rem;
-        margin-top: 8px;
+        font-size: 1.1rem;
         letter-spacing: 2px;
     }
     

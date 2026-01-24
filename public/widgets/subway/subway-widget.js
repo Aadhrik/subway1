@@ -65,12 +65,12 @@ class SubwayWidget extends Widget {
                 <header class="subway-header">
                     <div class="header-top">
                         <h2 class="station-name">Grand St</h2>
-                        <div class="header-datetime">
-                            <div class="header-time"></div>
-                            <div class="header-date"></div>
-                        </div>
+                        <div class="header-time"></div>
                     </div>
-                    <div class="direction">Uptown & The Bronx</div>
+                    <div class="header-bottom">
+                        <div class="direction">Uptown & The Bronx</div>
+                        <div class="header-date"></div>
+                    </div>
                 </header>
 
                 <div class="subway-departures">
